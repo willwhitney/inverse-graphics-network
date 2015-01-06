@@ -2,9 +2,10 @@
 import theano
 import theano.tensor as T
 theano.config.exception_verbosity = 'high'
-
+import numpy
 
 def getINTMMatrix(rng, igeon_pose):
+	
 	
 	np_fix_centr_to_origin = numpy.array([[1,0,-0.5],[0,1,-0.5],[0,0,1]])
 	fix_centr_to_origin = theano.shared(value=np_fix_centr_to_origin, name='np_fix_centr_to_origin', borrow=True)
