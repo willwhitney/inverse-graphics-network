@@ -88,7 +88,7 @@ class HiddenLayer(object):
         self.params = [self.W, self.b]
 
 
-class MLP(object):
+class GPNN(object):
     """Multi-Layer Perceptron Class
 
     A multilayer perceptron is a feedforward artificial neural network model
