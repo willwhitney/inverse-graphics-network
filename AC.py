@@ -5,7 +5,7 @@ import theano.tensor as T
 theano.config.exception_verbosity = 'high'
 
 class AC(object):
-    def __init__(self, rng, n_values, b=None, activation=T.tanh):
+    def __init__(self, rng, n_values=11*11, b=None, activation=T.tanh):
         """
         The AC units. They consist of only a bias, with no input term.
 
