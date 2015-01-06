@@ -147,7 +147,7 @@ class GPNN(object):
                 input=self.hiddenLayers[-1].output,
                 n_in=n_hidden,
                 n_out=n_out,
-                activation=identity)
+                activation=None)
 
         # L1 norm ; one regularization option is to enforce L1 norm to
         # be small
@@ -168,9 +168,5 @@ class GPNN(object):
                              []) \
                          + self.outputLayer.params
 
-    # for linear neurons
-    @staticmethod
-    def identity(x):
-        return x
 
 
