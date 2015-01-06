@@ -173,9 +173,4 @@ class GPNN(object):
     def identity(x):
         return x
 
-    @staticmethod
-    def logistic(x):
-        return 1 / (1 + T.exp(-x))
-
-
 
