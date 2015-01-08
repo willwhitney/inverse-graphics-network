@@ -4,18 +4,23 @@ import theano.ifelse as ifelse
 import numpy as np
 import intm
 import pdb
+import math
+### next:
+# fix the reset vector
+# reverse the order of matrix operations
+np.set_printoptions(precision=2, linewidth=200)
 
 template = theano.shared(np.array([[0.3, 0.1],
                                    [0.7, 0.9]]))
 
-rawGeoPose =  np.array([[1.,0.,-0.5], [0.,1.,-0.5], [0.,0.,1.]]) \
-            * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
-            * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
-            * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
-            * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
-            * np.array([[1.,0.,0.5],  [0.,1.,0.5],  [0.,0.,1.]])
+# rawGeoPose =  np.array([[1.,0.,-0.5], [0.,1.,-0.5], [0.,0.,1.]]) \
+#             * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
+#             * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
+#             * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
+#             * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
+#             * np.array([[1.,0.,0.5],  [0.,1.,0.5],  [0.,0.,1.]])
 # geoPose = theano.shared(rawGeoPose)
-geoPose = intm.getINTMMatrix(1, None, np.array([[1,1,0,1,1,0,0]]))[0]
+geoPose = intm.getINTMMatrix(1, None, np.array([[1,0,0,1,1,0,math.pi/2]]))[0]
 print geoPose.eval()
 # pdb.set_trace()
 # geoPose = theano.shared(np.array([[ 0.5 ,  0.  , -0.  ],
