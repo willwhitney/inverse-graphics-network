@@ -2,16 +2,25 @@ import theano
 import theano.tensor as T
 import theano.ifelse as ifelse
 import numpy as np
+import intm
+import pdb
 
-template = theano.shared(np.array([[0.3, 0.1], [0.7, 0.9]]))
+template = theano.shared(np.array([[0.3, 0.1],
+                                   [0.7, 0.9]]))
 
-rawGeoPose =  np.array([[1,0,-0.5], [0,1,-0.5], [0,0,1]]) \
-            * np.array([[1,0,-6],    [0,1,-6],    [0,0,1]]) \
-            * np.array([[1,0,0],    [0,1,1],    [0,0,1]]) \
-            * np.array([[1,0,0],    [0,1,1],    [0,0,1]]) \
-            * np.array([[0,-1,0],    [1,0,1],    [0,0,1]]) \
-            * np.array([[1,0,0.5],  [0,1,0.5],  [0,0,1]])
-geoPose = theano.shared(rawGeoPose)
+rawGeoPose =  np.array([[1.,0.,-0.5], [0.,1.,-0.5], [0.,0.,1.]]) \
+            * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
+            * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
+            * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
+            * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
+            * np.array([[1.,0.,0.5],  [0.,1.,0.5],  [0.,0.,1.]])
+# geoPose = theano.shared(rawGeoPose)
+geoPose = intm.getINTMMatrix(1, None, np.array([[1,1,0,1,1,0,0]]))[0]
+print geoPose.eval()
+# pdb.set_trace()
+# geoPose = theano.shared(np.array([[ 0.5 ,  0.  , -0.  ],
+#        [ 0.  ,  0.5 , 6.25],
+#        [ 0.  ,  0.  ,  1.  ]]))
 
 def update(output_x, output_y):
   x_offset = 4
@@ -57,6 +66,7 @@ def update_with_pose(output_x, output_y):
   output_coords = theano.shared(np.ones(3))
   output_coords = T.set_subtensor(output_coords[0], output_x)
   output_coords = T.set_subtensor(output_coords[1], output_y)
+
   template_coords = T.dot(geoPose, output_coords)
   template_x = template_coords[0]
   template_y = template_coords[1]
