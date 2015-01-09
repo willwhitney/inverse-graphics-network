@@ -1,42 +1,88 @@
-import numpy
+import numpy as np
 
 import theano
 import theano.tensor as T
+import theano.ifelse as ifelse
 
-def update_amount(template, geoPose, x, y):
-    template_coords = geoPose * np.array([x, y, 1])
-    x_template = template_coords[0]
-    y_template = template_coords[1]
-    x_low = T.floor(x_template)
-    x_high = T.ceil(x_template)
-    y_low = T.floor(y_template)
-    y_high = T.ceil(y_template)
+np.set_printoptions(precision=2, linewidth=200, suppress=True)
 
-    result = 1 / ((x_high - x_low) * (y_high - y_low)) * \
-                (   template[x_low][y_low]    * (x_high - x) * (y_high - y) + \
-                    template[x_high][y_low]   * (x - x_low)  * (y_high - y) + \
-                    template[x_low][y_high]   * (x_high - x) * (y - y_low) + \
-                    template[x_high][y_high]  * (x - x_low)  * (y - y_low))
-
-    return result
-
+output_side_length = 15
+def index_to_coords(i):
+    return (T.floor(i / output_side_length), i % output_side_length)
 
 class ACR(object):
     def __init__(self, ac):
         self.ac = ac
+        self.template = self.ac.template
+        self.template_size = T.shape(self.template)[0]
 
     def render(self, iGeoPose):
-        geoPose = iGeoPose[0]
-        intensity = iGeoPose[1]
+        # intensity = iGeoPose[0]
+        # geoPose = iGeoPose[1]
+        geoPose = iGeoPose
 
-        # output = theano.shared(value=np.zeros(28, 28), name='output', borrow=True)
-        theano.scan(fn=lambda prior_output, x, y: T.inc_subtensor(prior_output[x][y], update_amount(template, geoPose,x,y)),
-                    outputs_info=output,
-                    sequences=[np.array(range(28), range(28))]
-                    )
+        results, updates = theano.scan(lambda i: self.output_value_at(geoPose, index_to_coords(i)[0], index_to_coords(i)[1]),
+                                       sequences=[T.arange(output_side_length*output_side_length)])
+        return results.reshape([output_side_length, output_side_length])
+
+    def get_template_value(self, template_x, template_y):
+        x = T.sum(T.cast(template_x + (self.template_size / 2), 'int64'))
+        y = T.sum(T.cast(template_y + (self.template_size / 2), 'int64'))
+        return ifelse.ifelse(
+                            T.eq(
+                                    T.eq(T.ge(x, 0), T.lt(x, self.template_size)) +
+                                    T.eq(T.eq(T.ge(y, 0), T.lt(y, self.template_size)), 1),
+                                2),
+                            self.template[x, y],
+                            np.float64(0.0))
+
+    def get_interpolated_template_value(self, template_x, template_y):
+        x_low = T.floor(template_x)
+        x_high = ifelse.ifelse(
+                                T.eq(T.ceil(template_x), template_x),
+                                template_x + 1.0,
+                                T.ceil(template_x))
+
+        y_low = T.floor(template_y)
+        y_high = ifelse.ifelse(
+                                T.eq(T.ceil(template_y), template_y),
+                                template_y + 1.0,
+                                T.ceil(template_y))
+
+        return (1. / ((x_high - x_low) * (y_high - y_low))) * \
+               (self.get_template_value(x_low, y_low)    * (x_high - template_x) * (y_high - template_y) + \
+                self.get_template_value(x_high, y_low)   * (template_x - x_low)  * (y_high - template_y) + \
+                self.get_template_value(x_low, y_high)   * (x_high - template_x) * (template_y - y_low) + \
+                self.get_template_value(x_high, y_high)  * (template_x - x_low)  * (template_y - y_low))
+
+    def output_value_at(self, geoPose, output_x, output_y):
+        output_coords = theano.shared(np.ones(3))
+        output_coords = T.set_subtensor(output_coords[0], output_x)
+        output_coords = T.set_subtensor(output_coords[1], output_y)
+
+        template_coords = T.dot(geoPose, output_coords)
+        template_x = template_coords[0]
+        template_y = template_coords[1]
+
+        return self.get_interpolated_template_value(template_x, template_y)
 
 
-        template = self.ac.b
 
 
-igp = np.matrix()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

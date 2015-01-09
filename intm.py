@@ -13,7 +13,7 @@ def getINTMMatrix(bsize, rng, igeon_pose):
 	# cos_theta=T.cos(igeon_pose[:,6]); sin_theta=T.sin(igeon_pose[:,6])
 	theta = igeon_pose[:, 6]
 
-	image_size = 1#15.0
+	image_size = 0#15.0
 	offset = image_size / 2# - 2.0/2
 
 	fix_center_to_origin = T.zeros([bsize, 3, 3])
@@ -70,6 +70,16 @@ def getINTMMatrix(bsize, rng, igeon_pose):
 	npres = np.dot(n1,np.dot(n2,np.dot(n3,np.dot(n4, np.dot(n5,n6)))))
 	#print 'npres:', npres
 	# pdb.set_trace()
+
+	# return [intensity, igeo_pose]
 	return igeo_pose
+
+
+
+
+
+
+
+
 
 
