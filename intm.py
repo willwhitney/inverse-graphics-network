@@ -61,17 +61,15 @@ def getINTMMatrix(bsize, rng, igeon_pose):
 	#igeo_pose = T.batched_dot(fix_center_to_origin, T.batched_dot(trans_matrix, T.batched_dot(scaling_matrix, T.batched_dot(shearing_matrix, T.batched_dot(rot_matrix, fix_corner_to_origin)))))
 	igeo_pose = T.batched_dot(fix_corner_to_origin, T.batched_dot(rot_matrix, T.batched_dot(shearing_matrix, T.batched_dot(scaling_matrix, T.batched_dot(trans_matrix, fix_center_to_origin)))))
 
-	n1 = fix_center_to_origin.eval()[0];
-	n2 = trans_matrix.eval()[0];
-	n3 = scaling_matrix.eval()[0];
-	n4 = shearing_matrix.eval()[0];
-	n5 = rot_matrix.eval()[0];
-	n6 = fix_corner_to_origin.eval()[0];
-	npres = np.dot(n1,np.dot(n2,np.dot(n3,np.dot(n4, np.dot(n5,n6)))))
-	#print 'npres:', npres
-	# pdb.set_trace()
+	# n1 = fix_center_to_origin.eval()[0];
+	# n2 = trans_matrix.eval()[0];
+	# n3 = scaling_matrix.eval()[0];
+	# n4 = shearing_matrix.eval()[0];
+	# n5 = rot_matrix.eval()[0];
+	# n6 = fix_corner_to_origin.eval()[0];
+	# npres = np.dot(n1,np.dot(n2,np.dot(n3,np.dot(n4, np.dot(n5,n6)))))
 
-	# return [intensity, igeo_pose]
+
 	return (igeo_pose, intensity)
 
 
