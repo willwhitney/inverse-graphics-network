@@ -3,10 +3,11 @@ import numpy as np
 import theano
 import theano.tensor as T
 import theano.ifelse as ifelse
+import pdb
 
 np.set_printoptions(precision=2, linewidth=200, suppress=True)
 
-output_side_length = 15
+output_side_length = 10
 def index_to_coords(i):
     return (T.floor(i / output_side_length), i % output_side_length)
 
@@ -17,13 +18,13 @@ class ACR(object):
         self.template_size = T.shape(self.template)[0]
 
     def render(self, iGeoPose):
-        # intensity = iGeoPose[0]
-        # geoPose = iGeoPose[1]
-        geoPose = iGeoPose
+        geoPose = iGeoPose[0]
+        intensity = iGeoPose[1]
+        # geoPose = iGeoPose
 
         results, updates = theano.scan(lambda i: self.output_value_at(geoPose, index_to_coords(i)[0], index_to_coords(i)[1]),
                                        sequences=[T.arange(output_side_length*output_side_length)])
-        return results.reshape([output_side_length, output_side_length])
+        return results.reshape([output_side_length, output_side_length]) * intensity
 
     def get_template_value(self, template_x, template_y):
         x = T.sum(T.cast(template_x + (self.template_size / 2), 'int64'))

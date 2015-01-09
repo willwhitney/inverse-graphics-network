@@ -16,7 +16,8 @@ if __name__ == '__main__':
 
   ack = ac.AC(None, template=template, activation=None)
   acker = acr.ACR(ack)
-  iGeoPose = intm.getINTMMatrix(1, None, np.array([[1,-5,-5,0.5,0.5,0,math.pi/2]]))[0]
+  iGeoPose = (intm.getINTMMatrix(1, None, theano.shared(np.array([[0.5,-5,-5,0.5,0.5,0,math.pi/2]])))[0][0],
+              intm.getINTMMatrix(1, None, theano.shared(np.array([[0.5,-5,-5,0.5,0.5,0,math.pi/2]])))[1][0])
   print acker.render(iGeoPose).eval()
 
 

@@ -6,13 +6,15 @@ theano.config.exception_verbosity = 'high'
 
 def om(ac_contributions):
     """
-    Expects a 2D tensor with each ACR's output
+    Expects a 3D tensor with each ACR's output
     (i.e., intensity at each pixel location)
-    along one row.
+    as the highest-level index.
     """
 
     # element-wise exp(a_vector * 100)
     ac_contributions = T.exp(T.mul(ac_contributions, 100))
+
+
 
     # sum the corresponding elements of each contribution,
     # then element-wise log them and divide by 100
