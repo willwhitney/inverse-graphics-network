@@ -6,7 +6,7 @@ import pdb,math
 import numpy as np
 
 def getINTMMatrix(bsize, rng, igeon_pose):
-	intensity = igeon_pose[0]
+	intensity = igeon_pose[:,0]
 	t0=igeon_pose[:,1]; t1=igeon_pose[:,2]
 	s0=igeon_pose[:,3]; s1=igeon_pose[:,4]
 	z=igeon_pose[:,5];
@@ -72,7 +72,7 @@ def getINTMMatrix(bsize, rng, igeon_pose):
 	# pdb.set_trace()
 
 	# return [intensity, igeo_pose]
-	return igeo_pose
+	return (igeo_pose, intensity)
 
 
 

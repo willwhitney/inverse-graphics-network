@@ -50,7 +50,8 @@ class CapsuleNetwork(object):
 		#combine capsule ACRs
 		# rendering = self.combineCapsules(self.ACArray)
 
-
+		#define cost function
+		
 if __name__ == '__main__':
 	net = CapsuleNetwork()
 	net.create_model()
