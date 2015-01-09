@@ -35,14 +35,11 @@ class ACR(object):
                                     T.eq(T.eq(T.ge(y, 0), T.lt(y, self.template_size)), 1),
                                 2),
                             self.template[x, y],
-                            np.float64(0.0))
+                            T.constant(np.float64(0.0)))
 
     def get_interpolated_template_value(self, template_x, template_y):
         x_low = T.floor(template_x)
-        x_high = ifelse.ifelse(
-                                T.eq(T.ceil(template_x), template_x),
-                                template_x + 1.0,
-                                T.ceil(template_x))
+        x_high = ifelse.ifelse(T.eq(T.ceil(template_x), template_x),template_x + 1.0,T.ceil(template_x))
 
         y_low = T.floor(template_y)
         y_high = ifelse.ifelse(
