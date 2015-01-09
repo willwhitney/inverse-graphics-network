@@ -10,8 +10,8 @@ import math
 # reverse the order of matrix operations
 np.set_printoptions(precision=2, linewidth=200)
 
-template = theano.shared(np.array([[0.3, 0.1],
-                                   [0.7, 0.9]]))
+template = theano.shared(np.array([[0.22, 0.44],
+                                   [0.66, 0.88]]))
 
 # rawGeoPose =  np.array([[1.,0.,-0.5], [0.,1.,-0.5], [0.,0.,1.]]) \
 #             * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
@@ -20,7 +20,7 @@ template = theano.shared(np.array([[0.3, 0.1],
 #             * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
 #             * np.array([[1.,0.,0.5],  [0.,1.,0.5],  [0.,0.,1.]])
 # geoPose = theano.shared(rawGeoPose)
-geoPose = intm.getINTMMatrix(1, None, np.array([[1,0,0,1,1,0,math.pi/2]]))[0]
+geoPose = intm.getINTMMatrix(1, None, np.array([[1,-6,-5,0.5,0.5,1,math.pi/2]]))[0]
 print geoPose.eval()
 # pdb.set_trace()
 # geoPose = theano.shared(np.array([[ 0.5 ,  0.  , -0.  ],
@@ -82,11 +82,11 @@ def update_with_pose(output_x, output_y):
 def index_to_coords(i, side_length):
   return (T.floor(i / side_length), i % side_length)
 
-results, updates = theano.scan(lambda i: apply(update_with_pose, index_to_coords(i, 10)),
-                               sequences=[T.arange(10*10)])
+results, updates = theano.scan(lambda i: apply(update_with_pose, index_to_coords(i, 15)),
+                               sequences=[T.arange(15*15)])
 
 if __name__ == '__main__':
-  results = results.reshape([10, 10])
+  results = results.reshape([15, 15])
   print results.eval()
 
 
