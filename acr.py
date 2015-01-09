@@ -17,11 +17,17 @@ class ACR(object):
         self.template = self.ac.template
         self.template_size = T.shape(self.template)[0]
 
-    def render(self, iGeoPose):
-        geoPose = iGeoPose[0]
-        intensity = iGeoPose[1]
-        # geoPose = iGeoPose
+    def render_minibatch(self, iGeoArray):
+        # pdb.set_trace()
+        results, updates = theano.scan(self.render, sequences=[iGeoArray[0], iGeoArray[1]])
+        # pdb.set_trace()
+        return results
 
+    def render(self, geoPose, intensity):
+        # geoPose = iGeoPose[0]
+        # intensity = iGeoPose[1]
+        # geoPose = iGeoPose
+        # pdb.set_trace()
         results, updates = theano.scan(lambda i: self.output_value_at(geoPose, index_to_coords(i)[0], index_to_coords(i)[1]),
                                        sequences=[T.arange(output_side_length*output_side_length)])
         return results.reshape([output_side_length, output_side_length]) * intensity

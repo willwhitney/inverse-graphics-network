@@ -12,7 +12,7 @@ import pdb
 
 class CapsuleNetwork(object):
 	def __init__(self):
-		self.num_acrs = 1 #number of ACRs
+		self.num_acrs = 2 #number of ACRs
 		self.output = None
 		self.loss = None
 		self.params = None
@@ -26,18 +26,13 @@ class CapsuleNetwork(object):
 			# compute number of minibatches for training, validation and testing
 			self.n_train_batches = train_set_x.get_value(borrow=True).shape[0] / batch_size
 		else:
-			self.n_train_batches = 1
+			self.n_train_batches = 5
 
 		# allocate symbolic variables for the data
 		self.index = T.lscalar()    # index to a [mini]batch
 		#self.x = T.matrix('x')  # the data is presented as rasterized images
 		self.x = theano.shared(np.random.rand(self.n_train_batches,10*10))
 
-	def combineCapsules(ACs):
-		for i in range(len(ACs)):
-			AC = ACs[i]
-
-		return image
 
 	def create_model(self):
 		self.encoder = gpnn.GPNN(rng=self.rng, input=self.x, n_in=10 * 10, n_hidden=20, n_out=self.num_acrs*7)
@@ -57,11 +52,14 @@ class CapsuleNetwork(object):
 			ack = ac.AC(self.rng, template=None, activation=None)
 			self.ACRArray.append(acr.ACR(ack))
 			# pdb.set_trace()
-			self.outputs.append(self.ACRArray[i].render((self.iGeoArray[i][0][0], self.iGeoArray[i][1][0])))
+			self.outputs.append(self.ACRArray[i].render_minibatch((self.iGeoArray[i][0], self.iGeoArray[i][1])))
 
+		renderCache = self.outputs[0]
+		for i in range(1,self.num_acrs):
+			renderCache = T.stack(renderCache, self.outputs[i])
 
 		#combine capsule ACRs
-		rendering = om.om(self.outputs)
+		rendering = om.om(renderCache)
 
 		#define cost function
 		cost = (T.flatten(rendering) - self.x) ** 2

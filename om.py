@@ -3,6 +3,7 @@ import numpy
 import theano
 import theano.tensor as T
 theano.config.exception_verbosity = 'high'
+import pdb
 
 def om(ac_contributions):
     """
@@ -13,8 +14,6 @@ def om(ac_contributions):
 
     # element-wise exp(a_vector * 100)
     ac_contributions = T.exp(T.mul(ac_contributions, 100))
-
-
 
     # sum the corresponding elements of each contribution,
     # then element-wise log them and divide by 100
