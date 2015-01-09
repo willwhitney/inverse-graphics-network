@@ -8,10 +8,15 @@ import math
 ### next:
 # fix the reset vector
 # reverse the order of matrix operations
-np.set_printoptions(precision=2, linewidth=200)
+np.set_printoptions(precision=2, linewidth=200, suppress=True)
 
-template = theano.shared(np.array([[0.22, 0.44],
-                                   [0.66, 0.88]]))
+
+
+template = theano.shared(np.array([[0.22, 0.44, 0.22],
+                                   [0.66, 0.88, 0.66],
+                                   [0.11, 0.33, 0.11]]))
+
+template_size = T.shape(template)[0]
 
 # rawGeoPose =  np.array([[1.,0.,-0.5], [0.,1.,-0.5], [0.,0.,1.]]) \
 #             * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
@@ -20,9 +25,9 @@ template = theano.shared(np.array([[0.22, 0.44],
 #             * np.array([[1.,0.,0.],    [0.,1.,1.],    [0.,0.,1.]]) \
 #             * np.array([[1.,0.,0.5],  [0.,1.,0.5],  [0.,0.,1.]])
 # geoPose = theano.shared(rawGeoPose)
-geoPose = intm.getINTMMatrix(1, None, np.array([[1,-6,-5,0.5,0.5,1,math.pi/2]]))[0]
-print geoPose.eval()
-# pdb.set_trace()
+geoPose = intm.getINTMMatrix(1, None, np.array([[1,-5,-5,1,1,0,math.pi]]))[0]
+# print geoPose.eval()
+
 # geoPose = theano.shared(np.array([[ 0.5 ,  0.  , -0.  ],
 #        [ 0.  ,  0.5 , 6.25],
 #        [ 0.  ,  0.  ,  1.  ]]))
@@ -37,12 +42,12 @@ def update(output_x, output_y):
 
 
 def get_template_value(template_x, template_y):
-  x = T.sum(T.cast(template_x, 'int64'))
-  y = T.sum(T.cast(template_y, 'int64'))
+  x = T.sum(T.cast(template_x + (template_size / 2), 'int64'))
+  y = T.sum(T.cast(template_y + (template_size / 2), 'int64'))
   return ifelse.ifelse(
                       T.eq(
-                          T.eq(T.ge(x, 0), T.lt(x, 2)) +
-                          T.eq(T.eq(T.ge(y, 0), T.lt(y, 2)), 1),
+                          T.eq(T.ge(x, 0), T.lt(x, template_size)) +
+                          T.eq(T.eq(T.ge(y, 0), T.lt(y, template_size)), 1),
                         2),
                       template[x, y],
                       np.float64(0.0))
@@ -82,10 +87,11 @@ def update_with_pose(output_x, output_y):
 def index_to_coords(i, side_length):
   return (T.floor(i / side_length), i % side_length)
 
-results, updates = theano.scan(lambda i: apply(update_with_pose, index_to_coords(i, 15)),
-                               sequences=[T.arange(15*15)])
+# pdb.set_trace()
 
 if __name__ == '__main__':
+  results, updates = theano.scan(lambda i: apply(update_with_pose, index_to_coords(i, 15)),
+                               sequences=[T.arange(15*15)])
   results = results.reshape([15, 15])
   print results.eval()
 

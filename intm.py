@@ -69,7 +69,7 @@ def getINTMMatrix(bsize, rng, igeon_pose):
 	n6 = fix_corner_to_origin.eval()[0];
 	npres = np.dot(n1,np.dot(n2,np.dot(n3,np.dot(n4, np.dot(n5,n6)))))
 	#print 'npres:', npres
-	pdb.set_trace()
+	# pdb.set_trace()
 	return igeo_pose
 
 
