@@ -27,21 +27,20 @@ class ACR(object):
         # geoPose = iGeoPose[0]
         # intensity = iGeoPose[1]
         # geoPose = iGeoPose
-        # pdb.set_trace()
         results, updates = theano.scan(lambda i: self.output_value_at(geoPose, self.index_to_coords(i)[0], self.index_to_coords(i)[1]),
                                        sequences=[T.arange(self.image_size*self.image_size)])
         return results.reshape([self.image_size, self.image_size]) * intensity
 
     def get_template_value(self, template_x, template_y):
-        x = T.sum(T.cast(template_x + (self.template_size / 2), 'int64'))
-        y = T.sum(T.cast(template_y + (self.template_size / 2), 'int64'))
+        x = T.sum(T.cast(template_x + (self.template_size / 2), 'int16'))
+        y = T.sum(T.cast(template_y + (self.template_size / 2), 'int16'))
         return ifelse.ifelse(
                             T.eq(
                                     T.eq(T.ge(x, 0), T.lt(x, self.template_size)) +
                                     T.eq(T.eq(T.ge(y, 0), T.lt(y, self.template_size)), 1),
                                 2),
                             self.template[x, y],
-                            T.constant(np.float64(0.0)))
+                            T.constant(np.float32(0.0)))
 
     def get_interpolated_template_value(self, template_x, template_y):
         x_low = T.floor(template_x)
@@ -60,9 +59,12 @@ class ACR(object):
                 self.get_template_value(x_high, y_high)  * (template_x - x_low)  * (template_y - y_low))
 
     def output_value_at(self, geoPose, output_x, output_y):
-        output_coords = theano.shared(np.ones(3))
-        output_coords = T.set_subtensor(output_coords[0], output_x)
-        output_coords = T.set_subtensor(output_coords[1], output_y)
+        output_coords = theano.shared(np.float32(np.ones(3)))
+        #doing this -1 hack because we are using inctensor as subtensor has bugs in GPU
+        output_x = output_x - 1
+        outout_y = output_y - 1
+        output_coords = T.inc_subtensor(output_coords[0], output_x)
+        output_coords = T.inc_subtensor(output_coords[1], output_y)
 
         template_coords = T.dot(geoPose, output_coords)
         template_x = template_coords[0]

@@ -1,5 +1,5 @@
 import numpy as np
-
+import pdb
 import theano
 import theano.tensor as T
 theano.config.exception_verbosity = 'high'
@@ -19,9 +19,8 @@ class AC(object):
         :param activation: Non linearity to be applied in the hidden
                            layer. If `None`, output will be just template.
         """
-
         if template is None:
-            template_values = np.asarray(rng.uniform(0, 1, (template_size, template_size)))
+            template_values = np.float32(np.asarray(rng.uniform(0, 1, (template_size, template_size))))
             template = theano.shared(value=template_values, name='template', borrow=True)
         self.template = template
 

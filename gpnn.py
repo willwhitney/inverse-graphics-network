@@ -13,9 +13,9 @@ import gzip
 import os
 import sys
 import time
-
+import pdb
 import numpy
-
+import numpy as np
 import theano
 import theano.tensor as T
 theano.config.exception_verbosity = 'high'
@@ -65,22 +65,21 @@ class HiddenLayer(object):
         #        We have no info for other function, so we use the same as
         #        tanh.
         if W is None:
-            W_values = numpy.asarray(rng.uniform(
+            W_values = np.array(numpy.random.uniform(
                     low=-numpy.sqrt(6. / (n_in + n_out)),
                     high=numpy.sqrt(6. / (n_in + n_out)),
-                    size=(n_in, n_out)), dtype=theano.config.floatX)
+                    size=(n_in, n_out)),dtype=theano.config.floatX)
+
             if activation == theano.tensor.nnet.sigmoid:
                 W_values *= 4
-
             W = theano.shared(value=W_values, name='W', borrow=True)
-
+    
         if b is None:
-            b_values = numpy.zeros((n_out,), dtype=theano.config.floatX)
+            b_values = numpy.zeros((n_out,), dtype='float32')
             b = theano.shared(value=b_values, name='b', borrow=True)
 
         self.W = W
         self.b = b
-
         lin_output = T.dot(input, self.W) + self.b
         self.output = (lin_output if activation is None
                        else activation(lin_output))

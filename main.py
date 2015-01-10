@@ -14,13 +14,14 @@ from logistic_sgd import LogisticRegression, load_data
 global image_size
 image_size = 28
 
+#xx={self.x:np.float32(np.random.rand(2,28*28))}
+
 class CapsuleNetwork(object):
 	def __init__(self, dataset='mnist.pkl.gz'):
 		self.num_acrs = 2 #number of ACRs
 		self.rng = np.random.RandomState(123)
 		# self.theano_rng = RandomStreams(rng.randint(2 ** 30))
-		self.n_train_batches = 5
-		self.batch_size = 10
+		self.batch_size = 2
 		# if True:
 
 		datasets = load_data(dataset)
@@ -41,7 +42,7 @@ class CapsuleNetwork(object):
 		# 	# allocate symbolic variables for the data
 		# 	self.index = T.lscalar()    # index to a [mini]batch
 		# 	#self.x = T.matrix('x')  # the data is presented as rasterized images
-		# 	self.x = theano.shared(np.random.rand(self.batch_size,image_size*image_size))
+		# self.x = theano.shared(np.random.rand(self.batch_size,image_size*image_size))
 
 
 	def create_model(self):
@@ -55,8 +56,7 @@ class CapsuleNetwork(object):
 		self.outputs = []
 		for i in range(self.num_acrs):
 			igeon_indx = range(i,i+7) #pose + intensity
-			self.iGeoArray[i] = intm.getINTMMatrix(self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
-			# pdb.set_trace()
+			self.iGeoArray[i] = intm.getINTMMatrix(self.x, self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
 
 			# template = theano.shared(np.array([[0.22, 0.44, 0.22],
 		 #                                     [0.66, 0.88, 0.66],
@@ -75,7 +75,7 @@ class CapsuleNetwork(object):
 		rendering = om.om(renderCache)
 
 		#define cost function
-		self.cost = (T.reshape(rendering, [self.batch_size, self.image_size * self.image_size]) - self.x) ** 2
+		self.cost = T.pow(T.reshape(rendering, [self.batch_size, self.image_size * self.image_size]) - self.x, 2)
 		self.cost = T.sum(self.cost)
 
 		#aggregate all params
@@ -83,6 +83,7 @@ class CapsuleNetwork(object):
 		for acker in self.ACRArray:
 			self.params = self.params + acker.ac.params
 		self.params = [self.params[0]]
+
 
 def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, dataset='mnist.pkl.gz'):
 	######################
@@ -96,6 +97,7 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 	print 'created model'
 	# compiling a Theano function that computes the mistakes that are made
 	# by the model on a minibatch
+	# pdb.set_trace()
 
 	test_model = theano.function(inputs=[cnet.index],
 					outputs=cnet.cost,
@@ -108,6 +110,7 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 							cnet.x: cnet.valid_set_x[cnet.index * cnet.batch_size:(cnet.index + 1) * cnet.batch_size]})
 
 	print 'created test and validate functions'
+
 	# compute the gradient of cost with respect to theta (stored in params)
 	# the resulting gradients will be stored in a list gparams
 	gparams = []
@@ -122,8 +125,6 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 	updates = []
 	for param, gparam in zip(cnet.params, gparams):
 			updates.append((param, param - learning_rate * gparam))
-
-	# pdb.set_trace()
 
 	print 'built updates'
 	# compiling a Theano function `train_model` that returns the cost, but
@@ -162,7 +163,7 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 	while (epoch < n_epochs) and (not done_looping):
 		epoch = epoch + 1
 		for minibatch_index in xrange(cnet.n_train_batches):
-
+			print 'minibatch index:', minibatch_index
 			minibatch_avg_cost = train_model(minibatch_index)
 			# iteration number
 			iter = (epoch - 1) * cnet.n_train_batches + minibatch_index
