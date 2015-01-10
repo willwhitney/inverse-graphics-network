@@ -7,13 +7,10 @@ import pdb
 
 np.set_printoptions(precision=2, linewidth=200, suppress=True)
 
-output_side_length = 10
-def index_to_coords(i):
-    return (T.floor(i / output_side_length), i % output_side_length)
-
 class ACR(object):
-    def __init__(self, ac):
+    def __init__(self, ac, image_size):
         self.ac = ac
+        self.image_size = image_size
         self.template = self.ac.template
         self.template_size = T.shape(self.template)[0]
 
@@ -23,14 +20,17 @@ class ACR(object):
         # pdb.set_trace()
         return results
 
+    def index_to_coords(self, i):
+        return (T.floor(i / self.image_size), i % self.image_size)
+
     def render(self, geoPose, intensity):
         # geoPose = iGeoPose[0]
         # intensity = iGeoPose[1]
         # geoPose = iGeoPose
         # pdb.set_trace()
-        results, updates = theano.scan(lambda i: self.output_value_at(geoPose, index_to_coords(i)[0], index_to_coords(i)[1]),
-                                       sequences=[T.arange(output_side_length*output_side_length)])
-        return results.reshape([output_side_length, output_side_length]) * intensity
+        results, updates = theano.scan(lambda i: self.output_value_at(geoPose, self.index_to_coords(i)[0], self.index_to_coords(i)[1]),
+                                       sequences=[T.arange(self.image_size*self.image_size)])
+        return results.reshape([self.image_size, self.image_size]) * intensity
 
     def get_template_value(self, template_x, template_y):
         x = T.sum(T.cast(template_x + (self.template_size / 2), 'int64'))

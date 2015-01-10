@@ -8,8 +8,11 @@ import ac
 import acr
 import om
 import numpy as np
-import pdb,time
+import pdb,time,math
 from logistic_sgd import LogisticRegression, load_data
+
+global image_size
+image_size = 28
 
 class CapsuleNetwork(object):
 	def __init__(self, dataset='mnist.pkl.gz'):
@@ -18,27 +21,34 @@ class CapsuleNetwork(object):
 		# self.theano_rng = RandomStreams(rng.randint(2 ** 30))
 		self.n_train_batches = 5
 		self.batch_size = 10
-		if True:
-			datasets = load_data(dataset)
-			self.train_set_x, self.train_set_y = datasets[0]
-			self.valid_set_x, self.valid_set_y = datasets[1]
-			self.test_set_x,  self.test_set_y = datasets[2]
+		# if True:
 
-			# compute number of minibatches for training, validation and testing
-			self.n_train_batches = self.train_set_x.get_value(borrow=True).shape[0] / self.batch_size
-			self.n_valid_batches = self.valid_set_x.get_value(borrow=True).shape[0] / self.batch_size
-			self.n_test_batches = self.test_set_x.get_value(borrow=True).shape[0] / self.batch_size
-			self.index = T.lscalar()  # index to a [mini]batch
-			self.x = T.matrix('x')
-		else:
-			# allocate symbolic variables for the data
-			self.index = T.lscalar()    # index to a [mini]batch
-			#self.x = T.matrix('x')  # the data is presented as rasterized images
-			self.x = theano.shared(np.random.rand(self.batch_size,10*10))
+		datasets = load_data(dataset)
+		self.train_set_x, self.train_set_y = datasets[0]
+		self.valid_set_x, self.valid_set_y = datasets[1]
+		self.test_set_x,  self.test_set_y = datasets[2]
+
+		# compute number of minibatches for training, validation and testing
+		self.n_train_batches = self.train_set_x.get_value(borrow=True).shape[0] / self.batch_size
+		self.n_valid_batches = self.valid_set_x.get_value(borrow=True).shape[0] / self.batch_size
+		self.n_test_batches = self.test_set_x.get_value(borrow=True).shape[0] / self.batch_size
+		self.index = T.lscalar()  # index to a [mini]batch
+		self.x = T.matrix('x')
+
+		self.image_size = int(T.shape(self.train_set_x[1]).eval()**(1./2))
+		print "image size: ", self.image_size
+		# else:
+		# 	# allocate symbolic variables for the data
+		# 	self.index = T.lscalar()    # index to a [mini]batch
+		# 	#self.x = T.matrix('x')  # the data is presented as rasterized images
+		# 	self.x = theano.shared(np.random.rand(self.batch_size,image_size*image_size))
 
 
 	def create_model(self):
-		self.encoder = gpnn.GPNN(rng=self.rng, input=self.x, n_in=10 * 10, n_hidden=20, n_out=self.num_acrs*7)
+		self.encoder = gpnn.GPNN(rng=self.rng,
+														input=self.x,
+														n_in=self.image_size * self.image_size,
+														n_hidden=20, n_out=self.num_acrs*7)
 
 		self.iGeoArray = dict()
 		self.ACRArray = []
@@ -53,7 +63,7 @@ class CapsuleNetwork(object):
 		 #                                     [0.11, 0.33, 0.11]]))
 
 			ack = ac.AC(self.rng, template=None, activation=None)
-			self.ACRArray.append(acr.ACR(ack))
+			self.ACRArray.append(acr.ACR(ack, self.image_size))
 			# pdb.set_trace()
 			self.outputs.append(self.ACRArray[i].render_minibatch((self.iGeoArray[i][0], self.iGeoArray[i][1])))
 
@@ -65,13 +75,14 @@ class CapsuleNetwork(object):
 		rendering = om.om(renderCache)
 
 		#define cost function
-		self.cost = (T.flatten(rendering) - self.x) ** 2
+		self.cost = (T.reshape(rendering, [self.batch_size, self.image_size * self.image_size]) - self.x) ** 2
 		self.cost = T.sum(self.cost)
 
 		#aggregate all params
 		self.params = self.encoder.params
 		for acker in self.ACRArray:
 			self.params = self.params + acker.ac.params
+		self.params = [self.params[0]]
 
 def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, dataset='mnist.pkl.gz'):
 	######################
@@ -85,6 +96,7 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 	print 'created model'
 	# compiling a Theano function that computes the mistakes that are made
 	# by the model on a minibatch
+
 	test_model = theano.function(inputs=[cnet.index],
 					outputs=cnet.cost,
 					givens={
@@ -110,6 +122,8 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 	updates = []
 	for param, gparam in zip(cnet.params, gparams):
 			updates.append((param, param - learning_rate * gparam))
+
+	# pdb.set_trace()
 
 	print 'built updates'
 	# compiling a Theano function `train_model` that returns the cost, but
