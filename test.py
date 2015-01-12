@@ -21,7 +21,7 @@ if __name__ == '__main__':
   render = acker.render(iGeoPose[0], iGeoPose[1])
   print render.eval()
 
-  print T.grad(T.sum(render), acker.template).eval()
+  # print T.grad(T.sum(render), acker.template).eval()
   pdb.set_trace()
 
 

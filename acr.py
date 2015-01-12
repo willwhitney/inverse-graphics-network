@@ -38,9 +38,33 @@ class ACR(object):
 
         within_x_bounds = T.eq(T.ge(x, 0), T.le(x, self.template_size - 1))
         within_y_bounds = T.eq(T.ge(y, 0), T.le(y, self.template_size - 1))
+
+        x_min_opts = T.zeros(2)
+        x_min_opts = T.set_subtensor(x_min_opts[0], x)
+        x_min_opts = T.set_subtensor(x_min_opts[1], self.template_size - 1)
+        x_min = T.min(x_min_opts)
+
+        x_max_opts = T.zeros(2)
+        x_max_opts = T.set_subtensor(x_max_opts[0], x_min)
+        x_max_opts = T.set_subtensor(x_max_opts[1], 0)
+        x_inside = T.cast(T.max(x_max_opts), 'int32')
+
+        y_min_opts = T.zeros(2)
+        y_min_opts = T.set_subtensor(y_min_opts[0], y)
+        y_min_opts = T.set_subtensor(y_min_opts[1], self.template_size - 1)
+        y_min = T.min(y_min_opts)
+
+        y_max_opts = T.zeros(2)
+        y_max_opts = T.set_subtensor(y_max_opts[0], y_min)
+        y_max_opts = T.set_subtensor(y_max_opts[1], 0)
+        y_inside = T.cast(T.max(y_max_opts), 'int32')
+
+
+        # inside_x = T.max([T.min(np.array([x, self.template_size - 1])), 0])
+        # inside_y = T.max([T.min(np.array([y, self.template_size - 1])), 0])
         return ifelse.ifelse(
                             T.eq(within_x_bounds + within_y_bounds, 2),
-                            self.template[2, 2],
+                            self.template[x_inside, y_inside],
                             T.constant(np.float32(0.0)))
 
     def get_interpolated_template_value(self, template_x, template_y):
