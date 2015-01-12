@@ -21,7 +21,7 @@ class CapsuleNetwork(object):
 		self.num_acrs = 2 #number of ACRs
 		self.rng = np.random.RandomState(123)
 		# self.theano_rng = RandomStreams(rng.randint(2 ** 30))
-		self.batch_size = 2
+		self.batch_size = 20
 		# if True:
 
 		datasets = load_data(dataset)
@@ -47,7 +47,7 @@ class CapsuleNetwork(object):
 		# self.x = theano.shared(np.random.rand(self.batch_size,image_size*image_size))
 
 
-	def create_model(self):
+	def create_model(self, L1_reg=0.00, L2_reg=0.0001):
 		self.encoder = gpnn.GPNN(rng=self.rng,
 														input=self.x,
 														n_in=self.image_size * self.image_size,
@@ -80,15 +80,19 @@ class CapsuleNetwork(object):
 		#define cost function
 		self.cost = T.pow(T.reshape(rendering, [self.batch_size, self.image_size * self.image_size]) - self.x, 2)
 		self.cost = T.sum(self.cost)
+		#adding regularization
+		self.cost = self.cost + L1_reg*(self.encoder.L1) + L2_reg*(self.encoder.L2_sqr)
 
 		#aggregate all params
 		self.params = self.encoder.params
 		for acker in self.ACRArray:
 			self.params = self.params + acker.ac.params
-		self.params = [self.params[0]]
+		# self.params = [self.params[0]]
+		#xx={self.x:np.float32(np.random.rand(self.batch_size,28*28))}
+		
 
 
-def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, dataset='mnist.pkl.gz'):
+def train_test(learning_rate=0.01, n_epochs=50, dataset='mnist.pkl.gz'):
 	######################
 	# BUILD ACTUAL MODEL #
 	######################
@@ -116,10 +120,11 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 
 	# compute the gradient of cost with respect to theta (stored in params)
 	# the resulting gradients will be stored in a list gparams
-	gparams = []
-	for param in cnet.params:
-			gparam = T.grad(cnet.cost, param)
-			gparams.append(gparam)
+	# gparams = []
+	# for param in cnet.params:
+	# 		gparam = T.grad(cnet.cost, param)
+	# 		gparams.append(gparam)
+	gparams = T.grad(cnet.cost, cnet.params)
 
 	print 'built gparams'
 
