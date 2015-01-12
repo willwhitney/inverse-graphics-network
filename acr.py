@@ -27,24 +27,28 @@ class ACR(object):
         # geoPose = iGeoPose[0]
         # intensity = iGeoPose[1]
         # geoPose = iGeoPose
-        results, updates = theano.scan(lambda i: self.output_value_at(geoPose, self.index_to_coords(i)[0], self.index_to_coords(i)[1]),
+        results, updates = theano.scan(lambda i: self.output_value_at(geoPose, self.index_to_coords(i)),
                                        sequences=[T.arange(self.image_size*self.image_size)])
         return results.reshape([self.image_size, self.image_size]) * intensity
 
     def get_template_value(self, template_x, template_y):
-        x = T.sum(T.cast(template_x + (self.template_size / 2), 'int16'))
-        y = T.sum(T.cast(template_y + (self.template_size / 2), 'int16'))
+        # use true_div to prevent rounding error
+        x = T.sum(T.cast(template_x + T.true_div(self.template_size - 1, 2), 'int32'))
+        y = T.sum(T.cast(template_y + T.true_div(self.template_size - 1, 2), 'int32'))
+
+        within_x_bounds = T.eq(T.ge(x, 0), T.le(x, self.template_size - 1))
+        within_y_bounds = T.eq(T.ge(y, 0), T.le(y, self.template_size - 1))
         return ifelse.ifelse(
-                            T.eq(
-                                    T.eq(T.ge(x, 0), T.lt(x, self.template_size)) +
-                                    T.eq(T.eq(T.ge(y, 0), T.lt(y, self.template_size)), 1),
-                                2),
-                            self.template[x, y],
+                            T.eq(within_x_bounds + within_y_bounds, 2),
+                            self.template[2, 2],
                             T.constant(np.float32(0.0)))
 
     def get_interpolated_template_value(self, template_x, template_y):
         x_low = T.floor(template_x)
-        x_high = ifelse.ifelse(T.eq(T.ceil(template_x), template_x),template_x + 1.0,T.ceil(template_x))
+        x_high = ifelse.ifelse(
+                                T.eq(T.ceil(template_x), template_x),
+                                template_x + 1.0,
+                                T.ceil(template_x))
 
         y_low = T.floor(template_y)
         y_high = ifelse.ifelse(
@@ -58,11 +62,13 @@ class ACR(object):
                 self.get_template_value(x_low, y_high)   * (x_high - template_x) * (template_y - y_low) + \
                 self.get_template_value(x_high, y_high)  * (template_x - x_low)  * (template_y - y_low))
 
-    def output_value_at(self, geoPose, output_x, output_y):
+    def output_value_at(self, geoPose, coords):
+        output_x = coords[0]
+        output_y = coords[1]
         output_coords = theano.shared(np.float32(np.ones(3)))
         #doing this -1 hack because we are using inctensor as subtensor has bugs in GPU
         output_x = output_x - 1
-        outout_y = output_y - 1
+        output_y = output_y - 1
         output_coords = T.inc_subtensor(output_coords[0], output_x)
         output_coords = T.inc_subtensor(output_coords[1], output_y)
 
@@ -71,6 +77,7 @@ class ACR(object):
         template_y = template_coords[1]
 
         return self.get_interpolated_template_value(template_x, template_y)
+        # return self.get_template_value(template_x, template_y)
 
 
 

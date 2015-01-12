@@ -5,8 +5,9 @@ theano.config.exception_verbosity = 'high'
 import pdb,math
 import numpy as np
 
-def getINTMMatrix(x, bsize, rng, igeon_pose):
-	
+# def getINTMMatrix(x, bsize, rng, igeon_pose):
+def getINTMMatrix(bsize, rng, igeon_pose):
+
 	#xx={x:np.float32(np.random.rand(2,28*28))}
 
 	intensity = igeon_pose[:,0]
@@ -15,7 +16,7 @@ def getINTMMatrix(x, bsize, rng, igeon_pose):
 	z=igeon_pose[:,5];
 	# cos_theta=T.cos(igeon_pose[:,6]); sin_theta=T.sin(igeon_pose[:,6])
 	theta = igeon_pose[:, 6]
-	
+
 	image_size = 0#15.0
 	offset = image_size / 2# - 2.0/2
 
