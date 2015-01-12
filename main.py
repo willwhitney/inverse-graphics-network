@@ -31,8 +31,10 @@ class CapsuleNetwork(object):
 
 		# compute number of minibatches for training, validation and testing
 		self.n_train_batches = self.train_set_x.get_value(borrow=True).shape[0] / self.batch_size
-		self.n_valid_batches = self.valid_set_x.get_value(borrow=True).shape[0] / self.batch_size
-		self.n_test_batches = self.test_set_x.get_value(borrow=True).shape[0] / self.batch_size
+		self.n_valid_batches = 10
+		# self.n_valid_batches = self.valid_set_x.get_value(borrow=True).shape[0] / self.batch_size
+		self.n_test_batches = 100
+		# self.n_test_batches = self.test_set_x.get_value(borrow=True).shape[0] / self.batch_size
 		self.index = T.lscalar()  # index to a [mini]batch
 		self.x = T.matrix('x')
 
@@ -56,7 +58,8 @@ class CapsuleNetwork(object):
 		self.outputs = []
 		for i in range(self.num_acrs):
 			igeon_indx = range(i,i+7) #pose + intensity
-			self.iGeoArray[i] = intm.getINTMMatrix(self.x, self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
+			# self.iGeoArray[i] = intm.getINTMMatrix(self.x, self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
+			self.iGeoArray[i] = intm.getINTMMatrix(self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
 
 			# template = theano.shared(np.array([[0.22, 0.44, 0.22],
 		 #                                     [0.66, 0.88, 0.66],
@@ -168,10 +171,11 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 			# iteration number
 			iter = (epoch - 1) * cnet.n_train_batches + minibatch_index
 
-			if (iter + 1) % validation_frequency == 0:
+			# if (iter + 1) % validation_frequency == 0:
+			if True:
 				# compute zero-one loss on validation set
 				validation_losses = [validate_model(i) for i
-									 in xrange(n_valid_batches)]
+									 in xrange(cnet.n_valid_batches)]
 				this_validation_loss = np.mean(validation_losses)
 
 				print('epoch %i, minibatch %i/%i, validation error %f %%' %
@@ -190,7 +194,7 @@ def train_test(learning_rate=0.01, L1_reg=0.00, L2_reg=0.0001, n_epochs=50, data
 
 					# test it on the test set
 					test_losses = [test_model(i) for i
-								   in xrange(n_test_batches)]
+								   in xrange(cnet.n_test_batches)]
 					test_score = np.mean(test_losses)
 
 					print(('     epoch %i, minibatch %i/%i, test error of '
