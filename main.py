@@ -120,11 +120,11 @@ def train_test(learning_rate=0.01, n_epochs=50, dataset='mnist.pkl.gz'):
 
 	# compute the gradient of cost with respect to theta (stored in params)
 	# the resulting gradients will be stored in a list gparams
-	# gparams = []
-	# for param in cnet.params:
-	# 		gparam = T.grad(cnet.cost, param)
-	# 		gparams.append(gparam)
-	gparams = T.grad(cnet.cost, cnet.params)
+	gparams = []
+	for param in cnet.params:
+			gparam = T.grad(cnet.cost, param)
+			gparams.append(gparam)
+	# gparams = T.grad(cnet.cost, cnet.params)
 
 	print 'built gparams'
 
