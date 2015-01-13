@@ -18,7 +18,7 @@ import numpy
 import numpy as np
 import theano
 import theano.tensor as T
-theano.config.exception_verbosity = 'high'
+# theano.config.exception_verbosity = 'high'
 
 from logistic_sgd import LogisticRegression, load_data
 

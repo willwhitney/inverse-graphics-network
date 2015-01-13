@@ -2,7 +2,7 @@ import numpy
 
 import theano
 import theano.tensor as T
-theano.config.exception_verbosity = 'high'
+# theano.config.exception_verbosity = 'high'
 import pdb
 
 def om(ac_contributions):

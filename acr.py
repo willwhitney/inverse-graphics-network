@@ -5,7 +5,7 @@ import theano.tensor as T
 import theano.ifelse as ifelse
 import pdb
 
-np.set_printoptions(precision=2, linewidth=200, suppress=True)
+# np.set_printoptions(precision=2, linewidth=200, suppress=True)
 
 class ACR(object):
     def __init__(self, ac, image_size):
