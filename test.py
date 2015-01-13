@@ -14,13 +14,13 @@ if __name__ == '__main__':
                                                 [0.66, 0.88, 0.66],
                                                 [0.11, 0.33, 0.11]])), name='template')
   image_size = 10
-  transform = np.float32(np.array([[12,-65,-98,27,0.5,12,math.pi/7], [12,-65,-98,27,0.5,12,math.pi/7]]))
-
+  # transform = np.float32(np.array([[12,-65,-98,27,0.5,12,math.pi/7], [12,-65,-98,27,0.5,12,math.pi/7]]))
+  transform = np.float32(np.random.rand(100, 7))
   # pdb.set_trace()
 
   ack = ac.AC(None, template=template, activation=None)
   acker = acr.ACR(ack, theano.shared(image_size, name='image_size'))
-  intm.getINTMMatrix(1, None, theano.shared(transform))
+  intm.getINTMMatrix(2, None, theano.shared(transform))
   # iGeoPose = ([0][0],
   #             intm.getINTMMatrix(1, None, theano.shared(transform))[1][0])
   # render = acker.render(iGeoPose[0], iGeoPose[1])
