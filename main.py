@@ -18,10 +18,10 @@ image_size = 28
 
 class CapsuleNetwork(object):
 	def __init__(self, dataset='mnist.pkl.gz'):
-		self.num_acrs = 2 #number of ACRs
+		self.num_acrs = 9 #number of ACRs
 		self.rng = np.random.RandomState(123)
 		# self.theano_rng = RandomStreams(rng.randint(2 ** 30))
-		self.batch_size = 20
+		self.batch_size = 30
 		# if True:
 
 		datasets = load_data(dataset)
@@ -70,10 +70,13 @@ class CapsuleNetwork(object):
 			# pdb.set_trace()
 			self.outputs.append(self.ACRArray[i].render_minibatch((self.iGeoArray[i][0], self.iGeoArray[i][1])))
 
-		renderCache = self.outputs[0]
-		for i in range(1,self.num_acrs):
-			renderCache = T.stack(renderCache, self.outputs[i])
-
+		# renderCache = self.outputs[0]
+		# for i in range(1,self.num_acrs):
+		# 	renderCache = T.stack(renderCache, self.outputs[i])
+		renderCache = T.zeros([self.num_acrs, self.batch_size, self.image_size, self.image_size ])
+		for i in range(self.num_acrs):
+			renderCache = T.inc_subtensor(renderCache[i,:,:,:], self.outputs[i])
+	
 		#combine capsule ACRs
 		rendering = om.om(renderCache)
 
@@ -89,7 +92,6 @@ class CapsuleNetwork(object):
 			self.params = self.params + acker.ac.params
 		# self.params = [self.params[0]]
 		#xx={self.x:np.float32(np.random.rand(self.batch_size,28*28))}
-		
 
 
 def train_test(learning_rate=0.01, n_epochs=50, dataset='mnist.pkl.gz'):
@@ -97,6 +99,7 @@ def train_test(learning_rate=0.01, n_epochs=50, dataset='mnist.pkl.gz'):
 	# BUILD ACTUAL MODEL #
 	######################
 	print '... building the model'
+	learning_rate = np.float32(learning_rate)
 
 	cnet = CapsuleNetwork(dataset='mnist.pkl.gz')
 	print 'defined CapsuleNetwork'
@@ -176,8 +179,8 @@ def train_test(learning_rate=0.01, n_epochs=50, dataset='mnist.pkl.gz'):
 			# iteration number
 			iter = (epoch - 1) * cnet.n_train_batches + minibatch_index
 
-			# if (iter + 1) % validation_frequency == 0:
-			if True:
+			#if (iter + 1) % validation_frequency == 0:
+			if iter % 5 == 0:
 				# compute zero-one loss on validation set
 				validation_losses = [validate_model(i) for i
 									 in xrange(cnet.n_valid_batches)]
