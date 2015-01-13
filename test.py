@@ -14,17 +14,21 @@ if __name__ == '__main__':
                                                 [0.66, 0.88, 0.66],
                                                 [0.11, 0.33, 0.11]])), name='template')
   image_size = 10
+  transform = np.float32(np.array([[12,-65,-98,27,0.5,12,math.pi/7], [12,-65,-98,27,0.5,12,math.pi/7]]))
+
+  # pdb.set_trace()
 
   ack = ac.AC(None, template=template, activation=None)
   acker = acr.ACR(ack, theano.shared(image_size, name='image_size'))
-  iGeoPose = (intm.getINTMMatrix(1, None, theano.shared(np.float32(np.array([[1,-3,-3,1,1,0,0*math.pi/2]]))))[0][0],
-              intm.getINTMMatrix(1, None, theano.shared(np.float32(np.array([[1,-3,-3,1,1,0,0*math.pi/2]]))))[1][0])
-  render = acker.render(iGeoPose[0], iGeoPose[1])
-  print render.eval()
+  intm.getINTMMatrix(1, None, theano.shared(transform))
+  # iGeoPose = ([0][0],
+  #             intm.getINTMMatrix(1, None, theano.shared(transform))[1][0])
+  # render = acker.render(iGeoPose[0], iGeoPose[1])
+  # print render.eval()
 
-  cost = T.sum(T.pow(T.reshape(render, [1, image_size * image_size])
-                  - theano.shared(np.random.rand(1, image_size * image_size))
-              , 2))
+  # cost = T.sum(T.pow(T.reshape(render, [1, image_size * image_size])
+  #                 - theano.shared(np.random.rand(1, image_size * image_size))
+  #             , 2))
   # print T.grad(T.sum(render), acker.template).eval()
   pdb.set_trace()
 

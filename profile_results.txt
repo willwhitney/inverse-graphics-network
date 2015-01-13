@@ -1,0 +1,59 @@
+Function profiling
+==================
+  Message: None
+  Time in 1 calls to Function.__call__: 5.102158e-05s
+  Time in Function.fn.__call__: 2.503395e-05s (49.065%)
+  Time in thunks: 1.406670e-05s (27.570%)
+  Total compile time: 2.796603e+00s
+    Theano Optimizer time: 3.628850e-01s
+       Theano validate time: 6.794930e-05s
+    Theano Linker time (includes C, CUDA code generation/compiling): 1.854617e+00s
+
+Class
+---
+<% time> <sum %> <apply time> <time per call> <type> <#call> <#apply> <Class name>
+  57.6%    57.6%       0.000s       8.11e-06s     C        1        1   <class 'theano.compile.ops.Shape_i'>
+  42.4%   100.0%       0.000s       5.96e-06s     C        1        1   <class 'theano.tensor.opt.MakeVector'>
+   ... (remaining 0 Classes account for   0.00%(0.00s) of the runtime)
+
+Ops
+---
+<% time> <sum %> <apply time> <time per call> <type> <#call> <#apply> <Op name>
+  57.6%    57.6%       0.000s       8.11e-06s     C        1        1   Shape_i{1}
+  42.4%   100.0%       0.000s       5.96e-06s     C        1        1   MakeVector
+   ... (remaining 0 Ops account for   0.00%(0.00s) of the runtime)
+
+Apply
+------
+<% time> <sum %> <apply time> <time per call> <#call> <id> <Apply name>
+  57.6%    57.6%       0.000s       8.11e-06s      1     0   Shape_i{1}(<TensorType(float64, matrix)>)
+  42.4%   100.0%       0.000s       5.96e-06s      1     1   MakeVector(Shape_i{1}.0)
+   ... (remaining 0 Apply instances account for 0.00%(0.00s) of the runtime)
+
+Function profiling
+==================
+  Message: None
+  Time in 100 calls to Function.__call__: 4.175207e+03s
+  Time in Function.fn.__call__: 4.175181e+03s (99.999%)
+  Time in thunks: 4.175023e+03s (99.996%)
+  Total compile time: 1.222686e+02s
+    Theano Optimizer time: 6.431284e+01s
+       Theano validate time: 6.335454e-01s
+    Theano Linker time (includes C, CUDA code generation/compiling): 5.781617e+01s
+
+Class
+---
+<% time> <sum %> <apply time> <time per call> <type> <#call> <#apply> <Class name>
+  100.0%   100.0%     4174.028s       6.96e+00s     Py     600        6   <class 'theano.scan_module.scan_op.Scan'>
+   0.0%   100.0%       0.398s       2.88e-05s     C     13800      138   <class 'theano.tensor.subtensor.IncSubtensor'>
+   0.0%   100.0%       0.235s       1.02e-04s     C     2300       23   <class 'theano.tensor.elemwise.DimShuffle'>
+   0.0%   100.0%       0.230s       1.50e-05s     C     15300      153   <class 'theano.tensor.elemwise.Elemwise'>
+   0.0%   100.0%       0.047s       2.33e-04s     C      200        2   <class 'theano.tensor.basic.Alloc'>
+   0.0%   100.0%       0.034s       8.40e-05s     C      400        4   <class 'theano.tensor.elemwise.Sum'>
+   0.0%   100.0%       0.023s       1.60e-06s     C     14600      146   <class 'theano.tensor.subtensor.Subtensor'>
+   0.0%   100.0%       0.020s       9.81e-05s     C      200        2   <class 'theano.tensor.blas.Dot22'>
+   0.0%   100.0%       0.006s       6.49e-06s     C      900        9   <class 'theano.tensor.subtensor.AdvancedSubtensor1'>
+   0.0%   100.0%       0.002s       1.66e-05s     C      100        1   <class 'theano.tensor.basic.Reshape'>
+   0.0%   100.0%       0.001s       1.61e-06s     C      600        6   <class 'theano.tensor.basic.ScalarFromTensor'>
+   0.0%   100.0%       0.000s       4.65e-06s     C      100        1   <class 'theano.compile.ops.Shape_i'>
+   ... (remaining 0 Classes account for   0.00%(0.00s) of the runtime)

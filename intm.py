@@ -4,6 +4,27 @@ import theano.tensor as T
 theano.config.exception_verbosity = 'high'
 import pdb,math
 import numpy as np
+#  0  1  2 3 4 5 6
+# [1,-3,-3,1,1,0,0*math.pi/2]
+
+def build_single_iGeoPose(single_igeon):
+	# return single_igeon
+	# pdb.set_trace()
+	res = T.zeros([3,3])
+	res = T.set_subtensor(res[0,0],
+		single_igeon[3] * T.cos(single_igeon[6]))
+	res = T.set_subtensor(res[0,1],
+		single_igeon[4] * (single_igeon[5] * T.cos(single_igeon[6]) - T.sin(single_igeon[6])))
+	res = T.set_subtensor(res[0,2],
+		single_igeon[3] * single_igeon[1] * T.cos(single_igeon[6]) + single_igeon[4] * single_igeon[2] * (single_igeon[5] * T.cos(single_igeon[6]) - T.sin(single_igeon[6])))
+	res = T.set_subtensor(res[1,0],
+		single_igeon[3] * T.sin(single_igeon[6]))
+	res = T.set_subtensor(res[1,1],
+		single_igeon[4] * (single_igeon[5] * T.sin(single_igeon[6]) + T.cos(single_igeon[6])))
+	res = T.set_subtensor(res[1,2],
+		single_igeon[3] * single_igeon[1] * T.sin(single_igeon[6]) + single_igeon[4] * single_igeon[2] * (single_igeon[5] * T.sin(single_igeon[6]) + T.cos(single_igeon[6])))
+	res = T.set_subtensor(res[2,2], T.constant(1.))
+	return res
 
 # def getINTMMatrix(x, bsize, rng, igeon_pose):
 def getINTMMatrix(bsize, rng, igeon_pose):
@@ -65,6 +86,12 @@ def getINTMMatrix(bsize, rng, igeon_pose):
 	#igeo_pose = T.batched_dot(fix_center_to_origin, T.batched_dot(trans_matrix, T.batched_dot(scaling_matrix, T.batched_dot(shearing_matrix, T.batched_dot(rot_matrix, fix_corner_to_origin)))))
 	igeo_pose = T.batched_dot(fix_corner_to_origin, T.batched_dot(rot_matrix, T.batched_dot(shearing_matrix, T.batched_dot(scaling_matrix, T.batched_dot(trans_matrix, fix_center_to_origin)))))
 
+	# pdb.set_trace()
+
+	res, _ = theano.map(lambda i: build_single_iGeoPose(igeon_pose[i, :]),
+						 sequences=[T.arange(bsize)])
+	# res, _ = theano.map(lambda i: igeon_pose[i, :],
+	# 					 sequences=[T.arange(bsize)])
 	# n1 = fix_center_to_origin.eval()[0];
 	# n2 = trans_matrix.eval()[0];
 	# n3 = scaling_matrix.eval()[0];
@@ -72,7 +99,7 @@ def getINTMMatrix(bsize, rng, igeon_pose):
 	# n5 = rot_matrix.eval()[0];
 	# n6 = fix_corner_to_origin.eval()[0];
 	# npres = np.dot(n1,np.dot(n2,np.dot(n3,np.dot(n4, np.dot(n5,n6)))))
-	# pdb.set_trace()
+	pdb.set_trace()
 	return (igeo_pose, intensity)
 
 
