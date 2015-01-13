@@ -1,7 +1,7 @@
 #iGeoNice to iGeo matrix
 import theano
 import theano.tensor as T
-theano.config.exception_verbosity = 'high'
+# theano.config.exception_verbosity = 'high'
 import pdb,math
 import numpy as np
 #  0  1  2 3 4 5 6
@@ -101,6 +101,13 @@ def getINTMMatrix(bsize, rng, igeon_pose):
 	# npres = np.dot(n1,np.dot(n2,np.dot(n3,np.dot(n4, np.dot(n5,n6)))))
 	pdb.set_trace()
 	return (igeo_pose, intensity)
+
+  # for ii in range(bsize):
+  #   igeo_pose = T.set_subtensor(igeo_pose[ii,:,:], transformations[0][ii,:,:])
+  #   for jj in range(1,len(transformations)):
+  #     igeo_pose = T.set_subtensor(igeo_pose[ii,:,:], T.dot(transformations[jj][ii,:,:], igeo_pose[ii,:,:]))
+  # igeo_pose_gt = T.batched_dot(fix_corner_to_origin, T.batched_dot(rot_matrix, T.batched_dot(shearing_matrix, T.batched_dot(scaling_matrix, T.batched_dot(trans_matrix, fix_center_to_origin)))))
+
 
 
 

@@ -1,6 +1,6 @@
 import theano
 import theano.tensor as T
-theano.config.exception_verbosity = 'high'
+# theano.config.exception_verbosity = 'high'
 
 import gpnn
 import intm
@@ -21,7 +21,7 @@ class CapsuleNetwork(object):
 		self.num_acrs = 9 #number of ACRs
 		self.rng = np.random.RandomState(123)
 		# self.theano_rng = RandomStreams(rng.randint(2 ** 30))
-		self.batch_size = 30
+		self.batch_size = 20
 		# if True:
 
 		datasets = load_data(dataset)
@@ -48,10 +48,14 @@ class CapsuleNetwork(object):
 
 
 	def create_model(self, L1_reg=0.00, L2_reg=0.0001):
+		xx={self.x:np.float32(np.random.rand(self.batch_size,28*28))}
+
 		self.encoder = gpnn.GPNN(rng=self.rng,
 														input=self.x,
 														n_in=self.image_size * self.image_size,
 														n_hidden=20, n_out=self.num_acrs*7)
+		
+
 
 		self.iGeoArray = dict()
 		self.ACRArray = []
@@ -59,8 +63,8 @@ class CapsuleNetwork(object):
 		for i in range(self.num_acrs):
 			igeon_indx = range(i,i+7) #pose + intensity
 			# self.iGeoArray[i] = intm.getINTMMatrix(self.x, self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
-			self.iGeoArray[i] = intm.getINTMMatrix(self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
-
+			self.iGeoArray[i] = intm.getINTMMatrix(xx, self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
+			pdb.set_trace()
 			# template = theano.shared(np.array([[0.22, 0.44, 0.22],
 		 #                                     [0.66, 0.88, 0.66],
 		 #                                     [0.11, 0.33, 0.11]]))
@@ -92,7 +96,7 @@ class CapsuleNetwork(object):
 			self.params = self.params + acker.ac.params
 		# self.params = [self.params[0]]
 		#xx={self.x:np.float32(np.random.rand(self.batch_size,28*28))}
-
+		pdb.set_trace()
 
 def train_test(learning_rate=0.01, n_epochs=50, dataset='mnist.pkl.gz'):
 	######################
