@@ -18,10 +18,10 @@ image_size = 28
 
 class CapsuleNetwork(object):
 	def __init__(self, dataset='mnist.pkl.gz'):
-		self.num_acrs = 9 #number of ACRs
+		self.num_acrs = 1#9 #number of ACRs
 		self.rng = np.random.RandomState(123)
 		# self.theano_rng = RandomStreams(rng.randint(2 ** 30))
-		self.batch_size = 20
+		self.batch_size = 20#20
 		# if True:
 
 		datasets = load_data(dataset)
@@ -54,7 +54,13 @@ class CapsuleNetwork(object):
 														input=self.x,
 														n_in=self.image_size * self.image_size,
 														n_hidden=20, n_out=self.num_acrs*7)
-		
+		# import time
+		# for ii in range(100):
+		# 	t1=time.time()
+		# 	xx={self.x:np.float32(np.random.rand(self.batch_size,28*28))}
+		# 	gg=T.grad(T.sum(self.encoder.output), self.encoder.params[0]).eval(xx)
+		# 	print 'time per iter:', time.time() - t1
+		# pdb.set_trace()
 
 
 		self.iGeoArray = dict()
@@ -97,7 +103,7 @@ class CapsuleNetwork(object):
 		#xx={self.x:np.float32(np.random.rand(self.batch_size,28*28))}
 
 
-def train_test(learning_rate=0.01, n_epochs=50, dataset='mnist.pkl.gz'):
+def train_test(learning_rate=0.01, n_epochs=1, dataset='mnist.pkl.gz'):
 	######################
 	# BUILD ACTUAL MODEL #
 	######################
