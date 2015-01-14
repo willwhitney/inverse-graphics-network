@@ -8,11 +8,13 @@ import ac
 import acr
 import om
 import numpy as np
-import pdb,time,math
+import pdb,time,math,sys
 from logistic_sgd import LogisticRegression, load_data
 
-global image_size
-image_size = 28
+# global image_size
+# image_size = 28
+
+pdb.set_trace()
 
 #xx={self.x:np.float32(np.random.rand(2,28*28))}
 
@@ -54,6 +56,7 @@ class CapsuleNetwork(object):
 														input=self.x,
 														n_in=self.image_size * self.image_size,
 														n_hidden=20, n_out=self.num_acrs*7)
+
 		# import time
 		# for ii in range(100):
 		# 	t1=time.time()
@@ -70,6 +73,9 @@ class CapsuleNetwork(object):
 			igeon_indx = range(i,i+7) #pose + intensity
 			# self.iGeoArray[i] = intm.getINTMMatrix(self.x, self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
 			self.iGeoArray[i] = intm.getINTMMatrix(self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
+
+			# pdb.set_trace()
+
 			# template = theano.shared(np.array([[0.22, 0.44, 0.22],
 		 #                                     [0.66, 0.88, 0.66],
 		 #                                     [0.11, 0.33, 0.11]]))
@@ -85,7 +91,6 @@ class CapsuleNetwork(object):
 		renderCache = T.zeros([self.num_acrs, self.batch_size, self.image_size, self.image_size ])
 		for i in range(self.num_acrs):
 			renderCache = T.set_subtensor(renderCache[i,:,:,:], self.outputs[i])
-	
 		#combine capsule ACRs
 		rendering = om.om(renderCache)
 
@@ -118,25 +123,32 @@ def train_test(learning_rate=0.01, n_epochs=1, dataset='mnist.pkl.gz'):
 	# by the model on a minibatch
 	# pdb.set_trace()
 
-	test_model = theano.function(inputs=[cnet.index],
-					outputs=cnet.cost,
-					givens={
-							cnet.x: cnet.test_set_x[cnet.index * cnet.batch_size:(cnet.index + 1) * cnet.batch_size]})
+	# test_model = theano.function(inputs=[cnet.index],
+	# 				outputs=cnet.cost,
+	# 				givens={
+	# 						cnet.x: cnet.test_set_x[cnet.index * cnet.batch_size:(cnet.index + 1) * cnet.batch_size]})
 
-	validate_model = theano.function(inputs=[cnet.index],
-					outputs=cnet.cost,
-					givens={
-							cnet.x: cnet.valid_set_x[cnet.index * cnet.batch_size:(cnet.index + 1) * cnet.batch_size]})
+	# validate_model = theano.function(inputs=[cnet.index],
+	# 				outputs=cnet.cost,
+	# 				givens={
+	# 						cnet.x: cnet.valid_set_x[cnet.index * cnet.batch_size:(cnet.index + 1) * cnet.batch_size]})
 
 	print 'created test and validate functions'
 
+
 	# compute the gradient of cost with respect to theta (stored in params)
 	# the resulting gradients will be stored in a list gparams
-	gparams = []
-	for param in cnet.params:
-			gparam = T.grad(cnet.cost, param)
-			gparams.append(gparam)
-	# gparams = T.grad(cnet.cost, cnet.params)
+	# gparams = []
+	# for param in cnet.params:
+	# 		gparam = T.grad(cnet.cost, param)
+	# 		gparams.append(gparam)
+	gparams = T.grad(cnet.cost, cnet.params)
+
+	try:
+		theano.printing.debugprint(gparams)
+	except:
+		print "Couldn't print the graph."
+		print sys.exc_info(0)[0]
 
 	print 'built gparams'
 
@@ -182,7 +194,7 @@ def train_test(learning_rate=0.01, n_epochs=1, dataset='mnist.pkl.gz'):
 
 	while (epoch < n_epochs) and (not done_looping):
 		epoch = epoch + 1
-		for minibatch_index in xrange(cnet.n_train_batches):
+		for minibatch_index in xrange(1):#xrange(cnet.n_train_batches):
 			print 'minibatch index:', minibatch_index
 			minibatch_avg_cost = train_model(minibatch_index)
 			# iteration number
