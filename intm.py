@@ -22,6 +22,8 @@ def build_single_iGeoPose(single_igeon):
 	res = T.set_subtensor(res[2,2], T.constant(1.))
 	return res
 
+
+
 # def getINTMMatrix(x, bsize, rng, igeon_pose):
 def getINTMMatrix(bsize, rng, igeon_pose):
 

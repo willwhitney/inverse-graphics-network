@@ -89,12 +89,15 @@ class ACR(object):
     def output_value_at(self, geoPose, coords):
         output_x = coords[0]
         output_y = coords[1]
-        output_coords = theano.shared(np.float32(np.ones(3)))
+        output_coords = theano.shared(np.float32(np.ones(3)),borrow=True)
         #doing this -1 hack because we are using inctensor as subtensor has bugs in GPU
-        output_x = output_x - 1
-        output_y = output_y - 1
-        output_coords = T.inc_subtensor(output_coords[0], output_x)
-        output_coords = T.inc_subtensor(output_coords[1], output_y)
+        # output_x = output_x - 1
+        # output_y = output_y - 1
+        # output_coords = T.inc_subtensor(output_coords[0], output_x)
+        # output_coords = T.inc_subtensor(output_coords[1], output_y)
+        output_coords = T.set_subtensor(output_coords[0], output_x)
+        output_coords = T.set_subtensor(output_coords[1], output_y)
+
 
         template_coords = T.dot(geoPose, output_coords)
         template_x = template_coords[0]

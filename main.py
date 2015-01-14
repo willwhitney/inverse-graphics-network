@@ -63,8 +63,7 @@ class CapsuleNetwork(object):
 		for i in range(self.num_acrs):
 			igeon_indx = range(i,i+7) #pose + intensity
 			# self.iGeoArray[i] = intm.getINTMMatrix(self.x, self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
-			self.iGeoArray[i] = intm.getINTMMatrix(xx, self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
-			pdb.set_trace()
+			self.iGeoArray[i] = intm.getINTMMatrix(self.batch_size,self.rng, self.encoder.output[:,igeon_indx])
 			# template = theano.shared(np.array([[0.22, 0.44, 0.22],
 		 #                                     [0.66, 0.88, 0.66],
 		 #                                     [0.11, 0.33, 0.11]]))
@@ -79,7 +78,7 @@ class CapsuleNetwork(object):
 		# 	renderCache = T.stack(renderCache, self.outputs[i])
 		renderCache = T.zeros([self.num_acrs, self.batch_size, self.image_size, self.image_size ])
 		for i in range(self.num_acrs):
-			renderCache = T.inc_subtensor(renderCache[i,:,:,:], self.outputs[i])
+			renderCache = T.set_subtensor(renderCache[i,:,:,:], self.outputs[i])
 	
 		#combine capsule ACRs
 		rendering = om.om(renderCache)
@@ -96,7 +95,7 @@ class CapsuleNetwork(object):
 			self.params = self.params + acker.ac.params
 		# self.params = [self.params[0]]
 		#xx={self.x:np.float32(np.random.rand(self.batch_size,28*28))}
-		pdb.set_trace()
+
 
 def train_test(learning_rate=0.01, n_epochs=50, dataset='mnist.pkl.gz'):
 	######################
