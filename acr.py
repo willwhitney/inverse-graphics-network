@@ -28,8 +28,8 @@ class ACR(object):
         # intensity = iGeoPose[1]
         # geoPose = iGeoPose
         results, updates = theano.scan(lambda i: self.output_value_at(geoPose, self.index_to_coords(i)),
-                                       sequences=[T.arange(self.image_size*self.image_size)])
-        return results.reshape([self.image_size, self.image_size]) * intensity
+                                       sequences=[T.arange(self.image_size*self.image_size, dtype='float32')])
+        return results.reshape([T.cast(self.image_size,'int32'),T.cast(self.image_size,'int32')]) * intensity
 
     def get_template_value(self, template_x, template_y):
         # use true_div to prevent rounding error
@@ -68,6 +68,7 @@ class ACR(object):
                             T.constant(np.float32(0.0)))
 
     def get_interpolated_template_value(self, template_x, template_y):
+        # return self.template[0,0]*T.sin(template_x)*T.cos(template_y)
         x_low = T.floor(template_x)
         x_high = T.switch(
                                 T.eq(T.ceil(template_x), template_x),
@@ -97,7 +98,6 @@ class ACR(object):
         # output_coords = T.inc_subtensor(output_coords[1], output_y)
         output_coords = T.set_subtensor(output_coords[0], output_x)
         output_coords = T.set_subtensor(output_coords[1], output_y)
-
 
         template_coords = T.dot(geoPose, output_coords)
         template_x = template_coords[0]

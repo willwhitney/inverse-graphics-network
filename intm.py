@@ -6,7 +6,7 @@ import pdb,math
 import numpy as np
 
 def build_single_iGeoPose(single_igeon):
-	res = T.zeros([3,3])
+	res = T.zeros([3,3], dtype='float32')
 	res = T.set_subtensor(res[0,0],
 		single_igeon[3] * T.cos(single_igeon[6]))
 	res = T.set_subtensor(res[0,1],

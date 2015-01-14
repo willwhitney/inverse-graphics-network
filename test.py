@@ -39,14 +39,15 @@ if __name__ == '__main__':
 
 	#ACR test
 	if True:
-		image_size = 28
-		bsize = 30
+		image_size = np.float32(28)
+		bsize = 1
 		rng = np.random.RandomState(123)
 		ack = ac.AC(rng, template=None, activation=None)
 		acker = acr.ACR(ack, theano.shared(image_size, name='image_size'))
 
 		transform = T.matrix('transform') 
 		getINTM = intm.getINTMMatrix(bsize, None, transform)
+		# render = acker.render(getINTM[0][0], getINTM[1][0])
 		render = acker.render_minibatch(getINTM)
 
 		# gg = T.grad(T.sum(render), transform)#acker.template)

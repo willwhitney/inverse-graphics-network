@@ -38,7 +38,7 @@ class CapsuleNetwork(object):
 		self.index = T.lscalar()  # index to a [mini]batch
 		self.x = T.matrix('x')
 
-		self.image_size = int(T.shape(self.train_set_x[1]).eval()**(1./2))
+		self.image_size = np.float32(T.shape(self.train_set_x[1]).eval()**(1./2))
 		print "image size: ", self.image_size
 		# else:
 		# 	# allocate symbolic variables for the data
