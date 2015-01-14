@@ -62,20 +62,20 @@ class ACR(object):
 
         # inside_x = T.max([T.min(np.array([x, self.template_size - 1])), 0])
         # inside_y = T.max([T.min(np.array([y, self.template_size - 1])), 0])
-        return ifelse.ifelse(
+        return T.switch(
                             T.eq(within_x_bounds + within_y_bounds, 2),
                             self.template[x_inside, y_inside],
                             T.constant(np.float32(0.0)))
 
     def get_interpolated_template_value(self, template_x, template_y):
         x_low = T.floor(template_x)
-        x_high = ifelse.ifelse(
+        x_high = T.switch(
                                 T.eq(T.ceil(template_x), template_x),
                                 template_x + 1.0,
                                 T.ceil(template_x))
 
         y_low = T.floor(template_y)
-        y_high = ifelse.ifelse(
+        y_high = T.switch(
                                 T.eq(T.ceil(template_y), template_y),
                                 template_y + 1.0,
                                 T.ceil(template_y))

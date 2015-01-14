@@ -1,0 +1,2404 @@
+
+Function profiling
+==================
+  Message: None
+  Time in 1 calls to Function.__call__: 2.980232e-05s
+  Time in Function.fn.__call__: 1.811981e-05s (60.800%)
+  Time in thunks: 1.025200e-05s (34.400%)
+  Total compile time: 2.628272e+00s
+    Theano Optimizer time: 1.713395e-02s
+       Theano validate time: 7.390976e-05s
+    Theano Linker time (includes C, CUDA code generation/compiling): 1.243601e-01s
+
+Class
+---
+<% time> <sum %> <apply time> <time per call> <type> <#call> <#apply> <Class name>
+  60.5%    60.5%       0.000s       6.20e-06s     C        1        1   <class 'theano.compile.ops.Shape_i'>
+  39.5%   100.0%       0.000s       4.05e-06s     C        1        1   <class 'theano.tensor.opt.MakeVector'>
+   ... (remaining 0 Classes account for   0.00%(0.00s) of the runtime)
+
+Ops
+---
+<% time> <sum %> <apply time> <time per call> <type> <#call> <#apply> <Op name>
+  60.5%    60.5%       0.000s       6.20e-06s     C        1        1   Shape_i{1}
+  39.5%   100.0%       0.000s       4.05e-06s     C        1        1   MakeVector
+   ... (remaining 0 Ops account for   0.00%(0.00s) of the runtime)
+
+Apply
+------
+<% time> <sum %> <apply time> <time per call> <#call> <id> <Apply name>
+  60.5%    60.5%       0.000s       6.20e-06s      1     0   Shape_i{1}(<TensorType(float64, matrix)>)
+  39.5%   100.0%       0.000s       4.05e-06s      1     1   MakeVector(Shape_i{1}.0)
+   ... (remaining 0 Apply instances account for 0.00%(0.00s) of the runtime)
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.017s for 2/2 nodes before/after optimization
+   0.000s for fgraph.validate()
+   0.001s for callback
+   time      - (name, class, index) - validate time
+   0.005603s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.002205s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.000s
+     EquilibriumOptimizer      canonicalize
+       time 0.002s for 2 passes
+       nb nodes (start, end,  max) 2 2 2
+       time io_toposort 0.000s
+       time in local optimizers 0.002s
+       time in global optimizers 0.000s
+        0 - 0.001s 1 (0.000s in global opts, 0.000s io_toposort) - 2 nodes - ('local_shape_to_shape_i', 1)
+        1 - 0.001s 0 (0.000s in global opts, 0.000s io_toposort) - 2 nodes - 
+       times - times applied - name:
+       0.001s - 1 - local_shape_to_shape_i
+       0.001s - in 56 optimization that where not used
+
+   0.001812s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.001095s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.001s for 1 passes
+       nb nodes (start, end,  max) 2 2 2
+       time io_toposort 0.000s
+       time in local optimizers 0.000s
+       time in global optimizers 0.001s
+        0 - 0.001s 0 (0.001s in global opts, 0.000s io_toposort) - 2 nodes - 
+   0.000991s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.001s for 1 passes
+       nb nodes (start, end,  max) 2 2 2
+       time io_toposort 0.000s
+       time in local optimizers 0.000s
+       time in global optimizers 0.001s
+        0 - 0.001s 0 (0.001s in global opts, 0.000s io_toposort) - 2 nodes - 
+   0.000899s - ('specialize', 'EquilibriumOptimizer', 9) - 0.000s
+     EquilibriumOptimizer      specialize
+       time 0.001s for 1 passes
+       nb nodes (start, end,  max) 2 2 2
+       time io_toposort 0.000s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.001s 0 (0.000s in global opts, 0.000s io_toposort) - 2 nodes - 
+   0.000882s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.001s for 1 passes
+       nb nodes (start, end,  max) 2 2 2
+       time io_toposort 0.000s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.001s 0 (0.000s in global opts, 0.000s io_toposort) - 2 nodes - 
+   0.000782s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.001s for 2/2 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.000163s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.000s for 1 passes
+           nb nodes (start, end,  max) 2 2 2
+           time io_toposort 0.000s
+           time in local optimizers 0.000s
+           time in global optimizers 0.000s
+            0 - 0.000s 0 (0.000s in global opts, 0.000s io_toposort) - 2 nodes - 
+       0.000153s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 8.20159912109e-05
+       0.000123s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (2, 2, 0)
+           init io_toposort 3.19480895996e-05
+           loop time 3.09944152832e-05
+           callback_time 0.0
+       0.000119s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (2, 2, 0)
+           init io_toposort 3.31401824951e-05
+           loop time 2.28881835938e-05
+           callback_time 0.0
+       0.000108s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (2, 2, 0)
+           init io_toposort 3.2901763916e-05
+           loop time 1.59740447998e-05
+           callback_time 0.0
+       0.000099s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (2, 2, 0)
+           init io_toposort 3.2901763916e-05
+           loop time 5.00679016113e-06
+           callback_time 0.0
+
+   0.000221s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00021505355835
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.compile.function_module.Supervisor instance at 0x1087af6c8>: 0.0, <theano.gof.opt.Updater instance at 0x1066628c0>: 0, <theano.gof.opt.Updater instance at 0x106662950>: 0, <theano.gof.opt.Updater instance at 0x10f2b1ef0>: 0.0, <theano.gof.opt.Updater instance at 0x1066629e0>: 0, <theano.gof.opt.Updater instance at 0x106662a28>: 0, <theano.gof.opt.Updater instance at 0x10f2b1c68>: 0, <theano.gof.opt.ChangeTracker instance at 0x106648a70>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x10ed137d0>: 0.0, <theano.gof.opt.Updater instance at 0x106648290>: 0, <theano.gof.opt.ChangeTracker instance at 0x106648ab8>: 0.0, <theano.gof.opt.Updater instance at 0x10f2b1b00>: 0, <theano.gof.opt.Updater instance at 0x106648488>: 0, <theano.gof.opt.Updater instance at 0x106648f38>: 0, <theano.gof.opt.Updater instance at 0x106648bd8>: 0, <theano.gof.opt.ChangeTracker instance at 0x1066483f8>: 0.0, <theano.gof.opt.Updater instance at 0x106652440>: 0, <theano.gof.opt.Updater instance at 0x106648c68>: 0, <theano.gof.opt.Updater instance at 0x106648a28>: 0, <theano.gof.opt.Updater instance at 0x106662488>: 0, <theano.tensor.opt.ShapeFeature object at 0x10ed2f490>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f2b1cb0>: 0.0, <theano.gof.opt.Updater instance at 0x10f2b1a28>: 0, <theano.gof.toolbox.PreserveNames object at 0x10ed2fcd0>: 0.0, <theano.gof.opt.Updater instance at 0x106652710>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f2aed88>: 0.0, <theano.gof.opt.Updater instance at 0x106648cf8>: 0, <theano.gof.opt.Updater instance at 0x106648dd0>: 0, <theano.gof.opt.ChangeTracker instance at 0x1066485f0>: 0.0, <theano.gof.opt.Updater instance at 0x106662e18>: 0, <theano.gof.opt.MergeFeature object at 0x10ed51e50>: 0.0, <theano.gof.opt.Updater instance at 0x106648e60>: 0, <theano.gof.opt.Updater instance at 0x10f2aefc8>: 0, <theano.gof.opt.Updater instance at 0x106652ea8>: 0, <theano.gof.opt.ChangeTracker instance at 0x1066526c8>: 0.0, <theano.gof.opt.Updater instance at 0x10a2d3c68>: 0, <theano.gof.opt.Updater instance at 0x106648ef0>: 0, <theano.gof.opt.Updater instance at 0x106662710>: 0, <theano.gof.opt.ChangeTracker instance at 0x106652f38>: 0.0, <theano.gof.opt.Updater instance at 0x106648758>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f2b1f80>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x10f2a4f90>: 0.0, <theano.gof.opt.Updater instance at 0x106648fc8>: 0, <theano.gof.opt.Updater instance at 0x10f2b1ea8>: 0}
+       nb_merged 0
+       nb_constant 0
+   0.000207s - ('merge1', 'MergeOptimizer', 1) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 1.59740447998e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.tensor.opt.ShapeFeature object at 0x10ed2f490>: 0, <theano.gof.toolbox.PreserveNames object at 0x10ed2fcd0>: 0, <theano.compile.function_module.Supervisor instance at 0x1087af6c8>: 0, <theano.gof.opt.MergeFeature object at 0x10ed51e50>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x10ed137d0>: 0.0}
+       nb_merged 0
+       nb_constant 0
+   0.000194s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 5.98430633545e-05
+       loop time 1.00135803223e-05
+       callback_time 0.0
+   0.000179s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000174045562744
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.compile.function_module.Supervisor instance at 0x1087af6c8>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x10ed2fcd0>: 0.0, <theano.gof.opt.Updater instance at 0x10f2b1ef0>: 0.0, <theano.gof.opt.Updater instance at 0x10f2b1a28>: 0, <theano.gof.opt.Updater instance at 0x10f2b1c68>: 0, <theano.gof.opt.ChangeTracker instance at 0x106648a70>: 0, <theano.gof.opt.ChangeTracker instance at 0x106648ab8>: 0, <theano.gof.opt.Updater instance at 0x10f2b1b00>: 0, <theano.gof.opt.Updater instance at 0x106648f38>: 0, <theano.gof.opt.Updater instance at 0x106648bd8>: 0, <theano.gof.opt.ChangeTracker instance at 0x1066483f8>: 0, <theano.gof.opt.Updater instance at 0x106652440>: 0, <theano.gof.opt.Updater instance at 0x106648c68>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x10ed137d0>: 0.0, <theano.gof.opt.Updater instance at 0x106648488>: 0, <theano.tensor.opt.ShapeFeature object at 0x10ed2f490>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f2b1cb0>: 0.0, <theano.gof.opt.Updater instance at 0x106648a28>: 0, <theano.gof.opt.Updater instance at 0x106648cf8>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f2aed88>: 0.0, <theano.gof.opt.Updater instance at 0x106648dd0>: 0, <theano.gof.opt.ChangeTracker instance at 0x1066485f0>: 0, <theano.gof.opt.MergeFeature object at 0x10ed51e50>: 0.0, <theano.gof.opt.Updater instance at 0x106648e60>: 0, <theano.gof.opt.Updater instance at 0x10f2aefc8>: 0, <theano.gof.opt.Updater instance at 0x106652ea8>: 0, <theano.gof.opt.ChangeTracker instance at 0x1066526c8>: 0, <theano.gof.opt.Updater instance at 0x10a2d3c68>: 0, <theano.gof.opt.Updater instance at 0x106648ef0>: 0, <theano.gof.opt.Updater instance at 0x106652710>: 0, <theano.gof.opt.ChangeTracker instance at 0x106652f38>: 0, <theano.gof.opt.Updater instance at 0x106648758>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f2b1f80>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x10f2a4f90>: 0.0, <theano.gof.opt.Updater instance at 0x106648fc8>: 0, <theano.gof.opt.Updater instance at 0x10f2b1ea8>: 0}
+       nb_merged 0
+       nb_constant 0
+   0.000172s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.000s
+   0.000164s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 4.88758087158e-05
+       loop time 5.96046447754e-06
+       callback_time 0.0
+   0.000163s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 5.41210174561e-05
+       loop time 3.19480895996e-05
+       callback_time 0.0
+   0.000162s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.000s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.000s for 1 passes
+       nb nodes (start, end,  max) 2 2 2
+       time io_toposort 0.000s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.000s 0 (0.000s in global opts, 0.000s io_toposort) - 2 nodes - 
+   0.000158s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 4.6968460083e-05
+       loop time 5.96046447754e-06
+       callback_time 0.0
+   0.000155s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.000s for 1 passes
+       nb nodes (start, end,  max) 2 2 2
+       time io_toposort 0.000s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.000s 0 (0.000s in global opts, 0.000s io_toposort) - 2 nodes - 
+   0.000153s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.000134s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 4.38690185547e-05
+       loop time 3.60012054443e-05
+       callback_time 0.0
+   0.000124s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00011420249939
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.Updater instance at 0x10f2b1a28>: 0, <theano.gof.opt.MergeFeature object at 0x10ed51e50>: 0.0, <theano.gof.opt.Updater instance at 0x10f2b1c68>: 0, <theano.gof.opt.Updater instance at 0x106648488>: 0, <theano.tensor.opt.ShapeFeature object at 0x10ed2f490>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f2b1cb0>: 0.0, <theano.compile.function_module.Supervisor instance at 0x1087af6c8>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x10ed2fcd0>: 0.0, <theano.gof.opt.Updater instance at 0x10f2b1ef0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f2aed88>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x10f2a4f90>: 0.0, <theano.gof.opt.Updater instance at 0x10f2aefc8>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x10ed137d0>: 0.0}
+       nb_merged 0
+       nb_constant 0
+   0.000121s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 3.40938568115e-05
+       loop time 1.00135803223e-05
+       callback_time 0.0
+   0.000118s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 3.19480895996e-05
+       loop time 1.09672546387e-05
+       callback_time 0.0
+   0.000114s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 3.00407409668e-05
+       loop time 5.96046447754e-06
+       callback_time 0.0
+   0.000111s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (2, 2, 0)
+       init io_toposort 3.09944152832e-05
+       loop time 5.00679016113e-06
+       callback_time 0.0
+   0.000102s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.000048s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.000s
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.953s for 240/61 nodes before/after optimization
+   0.039s for fgraph.validate()
+   0.113s for callback
+   time      - (name, class, index) - validate time
+   0.381809s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.005s
+     EquilibriumOptimizer      canonicalize
+       time 0.382s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.014s
+       time in local optimizers 0.336s
+       time in global optimizers 0.010s
+        0 - 0.067s 22 (0.000s in global opts, 0.001s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.097s 14 (0.008s in global opts, 0.002s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.073s 2 (0.001s in global opts, 0.002s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.078s 2 (0.001s in global opts, 0.005s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.066s 0 (0.000s in global opts, 0.003s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.058s - 5 - local_add_canonizer
+       0.034s - 2 - local_mul_canonizer
+       0.017s - 8 - local_upcast_elemwise_constant_inputs
+       0.016s - 8 - local_mul_switch_sink
+       0.016s - 3 - constant_folding
+       0.010s - 3 - MergeOptimizer
+       0.010s - 8 - local_neg_to_mul
+       0.002s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_dimshuffle_lift
+       0.001s - 1 - local_subtensor_make_vector
+       0.179s - in 47 optimization that where not used
+
+   0.138015s - ('specialize', 'EquilibriumOptimizer', 9) - 0.001s
+     EquilibriumOptimizer      specialize
+       time 0.138s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.006s
+       time in local optimizers 0.109s
+       time in global optimizers 0.007s
+        0 - 0.039s 12 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.034s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.033s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.032s 0 (0.002s in global opts, 0.001s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.010s - 8 - local_dimshuffle_lift
+       0.008s - 8 - local_mul_to_neg
+       0.005s - 4 - local_reduce_broadcastable
+       0.093s - in 52 optimization that where not used
+
+   0.128135s - ('merge1', 'MergeOptimizer', 1) - 0.001s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0106761455536
+       validate_time 0.00146055221558
+       callback_time 0.00566792488098
+       callback_times {<theano.tensor.opt.ShapeFeature object at 0x10fa83210>: 0.0010273456573486328, <theano.gof.toolbox.ReplaceValidate object at 0x10f9fab90>: 0.00032830238342285156, <theano.compile.function_module.Supervisor instance at 0x10fa6b128>: 0.0003974437713623047, <theano.gof.opt.MergeFeature object at 0x10fa832d0>: 0.0018203258514404297, <theano.gof.toolbox.PreserveNames object at 0x10fa57dd0>: 0.00015854835510253906}
+       nb_merged 124
+       nb_constant 1
+   0.104446s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.018s
+   0.039983s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.040s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.034s
+       time in global optimizers 0.002s
+        0 - 0.040s 0 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.029940s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.030s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.007s
+       time in local optimizers 0.022s
+       time in global optimizers 0.000s
+        0 - 0.021s 8 (0.000s in global opts, 0.003s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.007s 4 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.018s - 8 - local_max_and_argmax
+       0.005s - 4 - local_max_to_min
+       0.000s - in 0 optimization that where not used
+
+   0.028297s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.009s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.00149393081665
+       loop time 0.0267148017883
+       callback_time 0.0180296897888
+   0.024769s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.002s
+   0.016010s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.016s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.014s
+        0 - 0.016s 0 (0.014s in global opts, 0.001s io_toposort) - 125 nodes - 
+   0.014706s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.015s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.013s
+        0 - 0.015s 0 (0.013s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.012365s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.012s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.002622s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.003s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.001s
+           time in local optimizers 0.001s
+           time in global optimizers 0.000s
+            0 - 0.003s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       0.002175s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00142002105713
+           loop time 0.000677824020386
+           callback_time 0.0
+       0.002161s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.000423908233643
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00147700309753
+       0.001975s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00151419639587
+           loop time 0.000389814376831
+           callback_time 0.0
+       0.001726s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00149297714233
+           loop time 0.000164031982422
+           callback_time 0.0
+       0.001686s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00143599510193
+           loop time 0.00017786026001
+           callback_time 0.0
+
+   0.010253s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.004840s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.00177192687988
+       loop time 0.00297880172729
+       callback_time 0.00206685066223
+   0.002404s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.001919s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.002s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.001907s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00135016441345
+       loop time 0.000471830368042
+       callback_time 0.0
+   0.001816s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.00140309333801
+       loop time 0.000368118286133
+       callback_time 0.0
+   0.001812s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00134587287903
+       loop time 0.000384092330933
+       callback_time 0.0
+   0.001728s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00135087966919
+       loop time 0.000293016433716
+       callback_time 0.0
+   0.001710s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00148701667786
+       loop time 0.000133991241455
+       callback_time 0.0
+   0.001628s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.001081s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00107407569885
+       validate_time 0.0002121925354
+       callback_time 0.000709056854248
+       callback_times {<theano.gof.opt.Updater instance at 0x10f6aa050>: 0.0, <theano.gof.opt.Updater instance at 0x10f6a2098>: 0, <theano.gof.opt.Updater instance at 0x1086cb2d8>: 0.0, <theano.gof.opt.Updater instance at 0x10f9c0128>: 0, <theano.gof.opt.Updater instance at 0x10f9ab950>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f9c4998>: 5.7220458984375e-06, <theano.gof.opt.Updater instance at 0x10fa60440>: 0, <theano.gof.opt.Updater instance at 0x10f6b0050>: 0.0, <theano.gof.opt.Updater instance at 0x10f99f9e0>: 0, <theano.gof.opt.Updater instance at 0x10f9b6050>: 0, <theano.gof.opt.Updater instance at 0x10f9c4440>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x10fa83210>: 2.8133392333984375e-05, <theano.gof.opt.ChangeTracker instance at 0x10f99fa70>: 6.9141387939453125e-06, <theano.gof.opt.ChangeTracker instance at 0x10f27f710>: 6.4373016357421875e-06, <theano.gof.opt.MergeFeature object at 0x10fa832d0>: 1.9073486328125e-05, <theano.gof.opt.Updater instance at 0x10f6b2dd0>: 0, <theano.gof.opt.Updater instance at 0x10fa85b48>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x10f9fab90>: 8.821487426757812e-06, <theano.gof.opt.ChangeTracker instance at 0x10f9c52d8>: 8.106231689453125e-06, <theano.gof.opt.Updater instance at 0x10f6aebd8>: 0, <theano.gof.opt.Updater instance at 0x10f9a9758>: 0.0, <theano.gof.opt.Updater instance at 0x10fa65c20>: 0, <theano.gof.opt.Updater instance at 0x10fa64440>: 0.0, <theano.gof.opt.Updater instance at 0x10fa86c68>: 0, <theano.gof.opt.Updater instance at 0x10f9a9cb0>: 0, <theano.gof.opt.ChangeTracker instance at 0x10fa69cf8>: 6.198883056640625e-06, <theano.gof.opt.Updater instance at 0x10fa64518>: 0, <theano.gof.opt.Updater instance at 0x1087afd40>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x10f960550>: 0.0002486705780029297, <theano.gof.opt.Updater instance at 0x10f7d8cf8>: 0, <theano.gof.toolbox.PreserveNames object at 0x10fa57dd0>: 5.7220458984375e-06, <theano.gof.opt.Updater instance at 0x10f282638>: 0, <theano.gof.opt.Updater instance at 0x10f9d0e60>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f99c518>: 5.7220458984375e-06, <theano.gof.opt.Updater instance at 0x10f98aa70>: 0, <theano.compile.function_module.Supervisor instance at 0x10fa6b128>: 0.0001399517059326172, <theano.gof.opt.ChangeTracker instance at 0x10f6a0ef0>: 6.4373016357421875e-06, <theano.gof.opt.Updater instance at 0x10fa8b710>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f6b2f38>: 7.152557373046875e-06, <theano.gof.opt.Updater instance at 0x10fa6a758>: 0, <theano.gof.opt.Updater instance at 0x10f27ed40>: 0, <theano.gof.opt.Updater instance at 0x10f9b77a0>: 0, <theano.gof.opt.Updater instance at 0x10f6a7fc8>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f9927e8>: 7.152557373046875e-06}
+       nb_merged 3
+       nb_constant 0
+   0.001038s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000846147537231
+       loop time 8.51154327393e-05
+       callback_time 0.0
+   0.001004s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000833988189697
+       loop time 7.70092010498e-05
+       callback_time 0.0
+   0.000637s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000301s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000295162200928
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.Updater instance at 0x10f6aa050>: 0.0, <theano.gof.opt.Updater instance at 0x10f6a2098>: 0, <theano.gof.opt.MergeFeature object at 0x10fa832d0>: 0.0, <theano.gof.opt.Updater instance at 0x10f9c0128>: 0, <theano.gof.opt.Updater instance at 0x10f9ab950>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f9c4998>: 0.0, <theano.gof.opt.Updater instance at 0x10fa60440>: 0, <theano.gof.opt.Updater instance at 0x10f6b0050>: 0.0, <theano.gof.opt.Updater instance at 0x10f99f9e0>: 0, <theano.gof.opt.Updater instance at 0x10f9b6050>: 0, <theano.gof.opt.Updater instance at 0x10f9c4440>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x10fa83210>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f99fa70>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f27f710>: 0.0, <theano.gof.opt.Updater instance at 0x1086cb2d8>: 0.0, <theano.gof.opt.Updater instance at 0x10f6b2dd0>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f6b2f38>: 0.0, <theano.gof.opt.Updater instance at 0x10fa85b48>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x10f9fab90>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f9c52d8>: 0.0, <theano.gof.opt.Updater instance at 0x10f6aebd8>: 0, <theano.gof.opt.Updater instance at 0x10fa8b710>: 0.0, <theano.gof.opt.Updater instance at 0x10f9a9758>: 0.0, <theano.gof.opt.Updater instance at 0x10fa65c20>: 0, <theano.gof.opt.Updater instance at 0x10fa64440>: 0.0, <theano.gof.opt.Updater instance at 0x10fa86c68>: 0, <theano.gof.opt.Updater instance at 0x10f9a0710>: 0.0, <theano.gof.opt.Updater instance at 0x10f9a9cb0>: 0, <theano.gof.opt.ChangeTracker instance at 0x10fa69cf8>: 0.0, <theano.gof.opt.Updater instance at 0x10fa64518>: 0, <theano.gof.opt.Updater instance at 0x10f3fcd40>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x10f960550>: 0.0, <theano.gof.opt.Updater instance at 0x10f7d8cf8>: 0, <theano.gof.toolbox.PreserveNames object at 0x10fa57dd0>: 0.0, <theano.gof.opt.Updater instance at 0x10f7d9e18>: 0, <theano.gof.opt.Updater instance at 0x10f282638>: 0, <theano.gof.opt.Updater instance at 0x10f9d0e60>: 0, <theano.gof.opt.Updater instance at 0x10fa6a758>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f99c518>: 0.0, <theano.gof.opt.Updater instance at 0x10f27ed40>: 0, <theano.gof.opt.Updater instance at 0x10f98aa70>: 0, <theano.compile.function_module.Supervisor instance at 0x10fa6b128>: 0.0, <theano.gof.opt.Updater instance at 0x10f6a4cf8>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f6a0ef0>: 0.0, <theano.gof.opt.Updater instance at 0x10f1b4710>: 0, <theano.gof.opt.Updater instance at 0x10f6b0f38>: 0.0, <theano.gof.opt.Updater instance at 0x10fa6e758>: 0, <theano.gof.opt.Updater instance at 0x10f281f80>: 0, <theano.gof.opt.Updater instance at 0x1087afd40>: 0, <theano.gof.opt.Updater instance at 0x10f9b77a0>: 0, <theano.gof.opt.Updater instance at 0x10f6a7fc8>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f9927e8>: 0.0}
+       nb_merged 0
+       nb_constant 0
+   0.000075s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 6.79492950439e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.tensor.opt.ShapeFeature object at 0x10fa83210>: 0.0, <theano.gof.opt.Updater instance at 0x10f9c4440>: 0.0, <theano.gof.opt.Updater instance at 0x10f6aa050>: 0.0, <theano.gof.opt.Updater instance at 0x10f9d0e60>: 0, <theano.gof.opt.ChangeTracker instance at 0x10f99fa70>: 0.0, <theano.gof.opt.Updater instance at 0x1086cb2d8>: 0.0, <theano.gof.opt.MergeFeature object at 0x10fa832d0>: 0.0, <theano.gof.opt.Updater instance at 0x10f9c0128>: 0, <theano.gof.opt.Updater instance at 0x10fa85b48>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x10f9c52d8>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x10f9fab90>: 0.0, <theano.gof.opt.Updater instance at 0x1087afd40>: 0, <theano.compile.function_module.Supervisor instance at 0x10fa6b128>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x10fa57dd0>: 0.0, <theano.gof.opt.Updater instance at 0x10f99f9e0>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x10f960550>: 0.0}
+       nb_merged 0
+       nb_constant 0
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.877s for 240/61 nodes before/after optimization
+   0.039s for fgraph.validate()
+   0.119s for callback
+   time      - (name, class, index) - validate time
+   0.386485s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.004s
+     EquilibriumOptimizer      canonicalize
+       time 0.386s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.011s
+       time in local optimizers 0.343s
+       time in global optimizers 0.007s
+        0 - 0.076s 22 (0.000s in global opts, 0.001s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.085s 14 (0.006s in global opts, 0.003s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.081s 2 (0.001s in global opts, 0.002s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.066s 2 (0.000s in global opts, 0.002s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.079s 0 (0.000s in global opts, 0.003s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.055s - 5 - local_add_canonizer
+       0.036s - 2 - local_mul_canonizer
+       0.018s - 8 - local_upcast_elemwise_constant_inputs
+       0.014s - 8 - local_mul_switch_sink
+       0.012s - 8 - local_neg_to_mul
+       0.007s - 3 - MergeOptimizer
+       0.006s - 3 - constant_folding
+       0.002s - 1 - local_dimshuffle_lift
+       0.002s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_subtensor_make_vector
+       0.196s - in 47 optimization that where not used
+
+   0.162623s - ('specialize', 'EquilibriumOptimizer', 9) - 0.002s
+     EquilibriumOptimizer      specialize
+       time 0.162s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.008s
+       time in local optimizers 0.129s
+       time in global optimizers 0.008s
+        0 - 0.055s 12 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.034s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.033s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.041s 0 (0.003s in global opts, 0.003s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.010s - 8 - local_dimshuffle_lift
+       0.010s - 4 - local_reduce_broadcastable
+       0.009s - 8 - local_mul_to_neg
+       0.107s - in 52 optimization that where not used
+
+   0.100339s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.017s
+   0.037061s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.037s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.032s
+       time in global optimizers 0.002s
+        0 - 0.037s 0 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.031338s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.010s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.00168180465698
+       loop time 0.0295588970184
+       callback_time 0.0198423862457
+   0.028421s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.002s
+   0.024166s - ('merge1', 'MergeOptimizer', 1) - 0.002s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0178570747375
+       validate_time 0.00224423408508
+       callback_time 0.00918507575989
+       callback_times {<theano.gof.toolbox.ReplaceValidate object at 0x117106b10>: 0.0004987716674804688, <theano.gof.toolbox.PreserveNames object at 0x117164d50>: 0.00025153160095214844, <theano.compile.function_module.Supervisor instance at 0x11716f050>: 0.0005846023559570312, <theano.gof.opt.MergeFeature object at 0x117190250>: 0.0030193328857421875, <theano.tensor.opt.ShapeFeature object at 0x117190190>: 0.0016584396362304688}
+       nb_merged 124
+       nb_constant 1
+   0.020570s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.020s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.005s
+       time in local optimizers 0.014s
+       time in global optimizers 0.000s
+        0 - 0.011s 8 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.007s 4 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.003s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.009s - 8 - local_max_and_argmax
+       0.005s - 4 - local_max_to_min
+       0.000s - in 0 optimization that where not used
+
+   0.018417s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.018s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.017s
+        0 - 0.018s 0 (0.017s in global opts, 0.001s io_toposort) - 125 nodes - 
+   0.015991s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.014541s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.014s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.013s
+        0 - 0.014s 0 (0.013s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.012275s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.012s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.002665s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.003s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.001s
+           time in local optimizers 0.001s
+           time in global optimizers 0.000s
+            0 - 0.003s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       0.002268s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00161910057068
+           loop time 0.000570058822632
+           callback_time 0.0
+       0.002169s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.000444173812866
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00147104263306
+       0.001865s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00141406059265
+           loop time 0.000385046005249
+           callback_time 0.0
+       0.001659s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00141191482544
+           loop time 0.000176906585693
+           callback_time 0.0
+       0.001633s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00141310691833
+           loop time 0.000156879425049
+           callback_time 0.0
+
+   0.005272s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.00174498558044
+       loop time 0.00342178344727
+       callback_time 0.00237274169922
+   0.002301s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.002s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.002s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.002115s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.001893s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00136709213257
+       loop time 0.00043797492981
+       callback_time 0.0
+   0.001884s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00135898590088
+       loop time 0.000441789627075
+       callback_time 0.0
+   0.001849s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.00142502784729
+       loop time 0.00037407875061
+       callback_time 0.0
+   0.001767s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00138807296753
+       loop time 0.000294923782349
+       callback_time 0.0
+   0.001765s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00153589248657
+       loop time 0.000138998031616
+       callback_time 0.0
+   0.001570s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.001149s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00114011764526
+       validate_time 0.00022292137146
+       callback_time 0.000736713409424
+       callback_times {<theano.gof.destroyhandler.DestroyHandler object at 0x1171a5810>: 0.00024509429931640625, <theano.gof.opt.Updater instance at 0x117174830>: 0, <theano.compile.function_module.Supervisor instance at 0x11716f050>: 0.0001430511474609375, <theano.gof.opt.Updater instance at 0x11df74878>: 0, <theano.gof.opt.Updater instance at 0x1171798c0>: 0.0, <theano.gof.opt.Updater instance at 0x11716e7e8>: 0, <theano.gof.opt.ChangeTracker instance at 0x11df74908>: 6.9141387939453125e-06, <theano.gof.opt.Updater instance at 0x117196128>: 0.0, <theano.gof.opt.Updater instance at 0x117196830>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1171a9998>: 5.9604644775390625e-06, <theano.tensor.opt.ShapeFeature object at 0x117190190>: 3.1948089599609375e-05, <theano.gof.opt.ChangeTracker instance at 0x1171741b8>: 7.152557373046875e-06, <theano.gof.opt.Updater instance at 0x1171749e0>: 0, <theano.gof.opt.Updater instance at 0x11716ea28>: 0.0, <theano.gof.opt.Updater instance at 0x11717d1b8>: 0, <theano.gof.opt.Updater instance at 0x11717d248>: 0, <theano.gof.opt.MergeFeature object at 0x117190250>: 2.2411346435546875e-05, <theano.gof.opt.Updater instance at 0x117175710>: 0, <theano.gof.opt.Updater instance at 0x11717d290>: 0, <theano.gof.opt.ChangeTracker instance at 0x11df81ab8>: 7.152557373046875e-06, <theano.gof.opt.Updater instance at 0x117173ab8>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x117106b10>: 9.775161743164062e-06, <theano.gof.opt.Updater instance at 0x1171a9320>: 0.0, <theano.gof.opt.Updater instance at 0x117196b48>: 0, <theano.gof.opt.Updater instance at 0x117175368>: 0, <theano.gof.opt.Updater instance at 0x117196bd8>: 0, <theano.gof.opt.Updater instance at 0x11717d440>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x117179cb0>: 7.867813110351562e-06, <theano.gof.opt.Updater instance at 0x11df70cf8>: 0.0, <theano.gof.opt.Updater instance at 0x117175518>: 0, <theano.gof.toolbox.PreserveNames object at 0x117164d50>: 5.9604644775390625e-06, <theano.gof.opt.Updater instance at 0x11717ad88>: 0, <theano.gof.opt.Updater instance at 0x117170248>: 0, <theano.gof.opt.ChangeTracker instance at 0x11717bdd0>: 8.106231689453125e-06, <theano.gof.opt.Updater instance at 0x117178518>: 0, <theano.gof.opt.ChangeTracker instance at 0x11717bea8>: 8.106231689453125e-06, <theano.gof.opt.Updater instance at 0x1171796c8>: 0, <theano.gof.opt.Updater instance at 0x117171128>: 0, <theano.gof.opt.Updater instance at 0x117170710>: 0, <theano.gof.opt.Updater instance at 0x1171aef38>: 0, <theano.gof.opt.ChangeTracker instance at 0x1171947a0>: 8.106231689453125e-06, <theano.gof.opt.Updater instance at 0x11717b7a0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11717dfc8>: 7.152557373046875e-06, <theano.gof.opt.Updater instance at 0x1171a97e8>: 0}
+       nb_merged 3
+       nb_constant 0
+   0.001002s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000837087631226
+       loop time 7.29560852051e-05
+       callback_time 0.0
+   0.000896s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000741958618164
+       loop time 7.00950622559e-05
+       callback_time 0.0
+   0.000734s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000266s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000262022018433
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.destroyhandler.DestroyHandler object at 0x1171a5810>: 0.0, <theano.gof.opt.Updater instance at 0x117174830>: 0, <theano.compile.function_module.Supervisor instance at 0x11716f050>: 0.0, <theano.gof.opt.Updater instance at 0x11df74878>: 0, <theano.gof.opt.Updater instance at 0x1171798c0>: 0.0, <theano.gof.opt.Updater instance at 0x11716e7e8>: 0, <theano.gof.opt.Updater instance at 0x11e0e60e0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11df74908>: 0.0, <theano.gof.opt.Updater instance at 0x117196128>: 0.0, <theano.gof.opt.Updater instance at 0x117196830>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1171a9998>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x117190190>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1171741b8>: 0.0, <theano.gof.opt.Updater instance at 0x1171749e0>: 0, <theano.gof.opt.Updater instance at 0x11717a200>: 0, <theano.gof.opt.Updater instance at 0x11716ea28>: 0.0, <theano.gof.opt.Updater instance at 0x11717d1b8>: 0, <theano.gof.opt.Updater instance at 0x11717d248>: 0, <theano.gof.opt.MergeFeature object at 0x117190250>: 0.0, <theano.gof.opt.Updater instance at 0x117175710>: 0, <theano.gof.opt.Updater instance at 0x11717d290>: 0, <theano.gof.opt.ChangeTracker instance at 0x11df81ab8>: 0.0, <theano.gof.opt.Updater instance at 0x117173ab8>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1171947a0>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x117106b10>: 0.0, <theano.gof.opt.Updater instance at 0x1171a9320>: 0.0, <theano.gof.opt.Updater instance at 0x117196b48>: 0, <theano.gof.opt.Updater instance at 0x117175368>: 0, <theano.gof.opt.Updater instance at 0x11df7db48>: 0.0, <theano.gof.opt.Updater instance at 0x117196bd8>: 0, <theano.gof.opt.Updater instance at 0x11717a3f8>: 0, <theano.gof.opt.ChangeTracker instance at 0x117179cb0>: 0.0, <theano.gof.opt.Updater instance at 0x11717d440>: 0.0, <theano.gof.opt.Updater instance at 0x117178cb0>: 0, <theano.gof.opt.Updater instance at 0x11df70cf8>: 0.0, <theano.gof.opt.Updater instance at 0x117175518>: 0, <theano.gof.opt.Updater instance at 0x11717e830>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x117164d50>: 0.0, <theano.gof.opt.Updater instance at 0x11717ad88>: 0, <theano.gof.opt.Updater instance at 0x117170248>: 0, <theano.gof.opt.ChangeTracker instance at 0x11717bdd0>: 0.0, <theano.gof.opt.Updater instance at 0x117178518>: 0, <theano.gof.opt.ChangeTracker instance at 0x11717bea8>: 0.0, <theano.gof.opt.Updater instance at 0x1171796c8>: 0, <theano.gof.opt.Updater instance at 0x117171128>: 0, <theano.gof.opt.Updater instance at 0x11dfd81b8>: 0, <theano.gof.opt.Updater instance at 0x117170710>: 0, <theano.gof.opt.Updater instance at 0x1171aef38>: 0, <theano.gof.opt.Updater instance at 0x1171a97e8>: 0, <theano.gof.opt.Updater instance at 0x11717b7a0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11717dfc8>: 0.0, <theano.gof.opt.Updater instance at 0x1171797e8>: 0}
+       nb_merged 0
+       nb_constant 0
+   0.000074s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 6.79492950439e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.destroyhandler.DestroyHandler object at 0x1171a5810>: 0.0, <theano.gof.opt.Updater instance at 0x11716ea28>: 0.0, <theano.gof.opt.Updater instance at 0x11717d440>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11716f050>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x117106b10>: 0.0, <theano.gof.opt.Updater instance at 0x117196128>: 0.0, <theano.gof.opt.Updater instance at 0x117175710>: 0, <theano.gof.opt.Updater instance at 0x1171a9320>: 0.0, <theano.gof.opt.Updater instance at 0x1171aef38>: 0, <theano.gof.toolbox.PreserveNames object at 0x117164d50>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x117190190>: 0.0, <theano.gof.opt.Updater instance at 0x11717d248>: 0, <theano.gof.opt.ChangeTracker instance at 0x1171947a0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11717dfc8>: 0.0, <theano.gof.opt.Updater instance at 0x117196bd8>: 0, <theano.gof.opt.MergeFeature object at 0x117190250>: 0.0}
+       nb_merged 0
+       nb_constant 0
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.788s for 240/61 nodes before/after optimization
+   0.037s for fgraph.validate()
+   0.108s for callback
+   time      - (name, class, index) - validate time
+   0.344653s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.005s
+     EquilibriumOptimizer      canonicalize
+       time 0.345s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.008s
+       time in local optimizers 0.307s
+       time in global optimizers 0.008s
+        0 - 0.070s 22 (0.000s in global opts, 0.002s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.081s 14 (0.006s in global opts, 0.002s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.067s 2 (0.001s in global opts, 0.002s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.064s 2 (0.000s in global opts, 0.002s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.062s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.047s - 5 - local_add_canonizer
+       0.034s - 2 - local_mul_canonizer
+       0.019s - 8 - local_upcast_elemwise_constant_inputs
+       0.015s - 8 - local_mul_switch_sink
+       0.009s - 8 - local_neg_to_mul
+       0.008s - 3 - MergeOptimizer
+       0.005s - 3 - constant_folding
+       0.002s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_dimshuffle_lift
+       0.001s - 1 - local_subtensor_make_vector
+       0.173s - in 47 optimization that where not used
+
+   0.137689s - ('specialize', 'EquilibriumOptimizer', 9) - 0.001s
+     EquilibriumOptimizer      specialize
+       time 0.138s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.006s
+       time in local optimizers 0.109s
+       time in global optimizers 0.007s
+        0 - 0.039s 12 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.033s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.035s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.031s 0 (0.002s in global opts, 0.001s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.010s - 8 - local_dimshuffle_lift
+       0.008s - 8 - local_mul_to_neg
+       0.005s - 4 - local_reduce_broadcastable
+       0.093s - in 52 optimization that where not used
+
+   0.097767s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.016s
+   0.036269s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.036s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.031s
+       time in global optimizers 0.002s
+        0 - 0.036s 0 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.028641s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.009s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.00146579742432
+       loop time 0.027086019516
+       callback_time 0.0181095600128
+   0.023324s - ('merge1', 'MergeOptimizer', 1) - 0.002s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0161421298981
+       validate_time 0.00215196609497
+       callback_time 0.00856161117554
+       callback_times {<theano.compile.function_module.Supervisor instance at 0x11e41d290>: 0.0005698204040527344, <theano.gof.toolbox.PreserveNames object at 0x11e40c090>: 0.00023508071899414062, <theano.tensor.opt.ShapeFeature object at 0x11e4043d0>: 0.0015568733215332031, <theano.gof.opt.MergeFeature object at 0x11e404490>: 0.0028340816497802734, <theano.gof.toolbox.ReplaceValidate object at 0x116ef8d50>: 0.00041365623474121094}
+       nb_merged 124
+       nb_constant 1
+   0.023027s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.002s
+   0.019053s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.019s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.017s
+        0 - 0.019s 0 (0.017s in global opts, 0.001s io_toposort) - 125 nodes - 
+   0.015378s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.015s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.005s
+       time in local optimizers 0.010s
+       time in global optimizers 0.000s
+        0 - 0.008s 8 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.005s 4 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.006s - 8 - local_max_and_argmax
+       0.004s - 4 - local_max_to_min
+       0.000s - in 0 optimization that where not used
+
+   0.014458s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.014s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.013s
+        0 - 0.014s 0 (0.013s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.013423s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.011883s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.012s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.002585s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.003s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.001s
+           time in local optimizers 0.001s
+           time in global optimizers 0.000s
+            0 - 0.003s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       0.002133s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.000399589538574
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00147581100464
+       0.002024s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00139498710632
+           loop time 0.000561952590942
+           callback_time 0.0
+       0.001861s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00141191482544
+           loop time 0.000381946563721
+           callback_time 0.0
+       0.001643s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00140190124512
+           loop time 0.000174045562744
+           callback_time 0.0
+       0.001621s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.0014009475708
+           loop time 0.000157117843628
+           callback_time 0.0
+
+   0.004622s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.0015242099762
+       loop time 0.00300407409668
+       callback_time 0.00208735466003
+   0.001906s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.002s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.001904s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.00141000747681
+       loop time 0.000441074371338
+       callback_time 0.0
+   0.001900s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00134801864624
+       loop time 0.000468015670776
+       callback_time 0.0
+   0.001841s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.001808s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00134301185608
+       loop time 0.000383853912354
+       callback_time 0.0
+   0.001726s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00134897232056
+       loop time 0.000295162200928
+       callback_time 0.0
+   0.001725s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00150203704834
+       loop time 0.000134944915771
+       callback_time 0.0
+   0.001342s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.001018s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00100994110107
+       validate_time 0.000199794769287
+       callback_time 0.000661849975586
+       callback_times {<theano.gof.opt.ChangeTracker instance at 0x11e42a830>: 5.9604644775390625e-06, <theano.gof.opt.Updater instance at 0x11e3fd050>: 0.0, <theano.gof.opt.Updater instance at 0x117018878>: 0, <theano.gof.toolbox.PreserveNames object at 0x11e40c090>: 6.67572021484375e-06, <theano.gof.opt.ChangeTracker instance at 0x11e3fb8c0>: 6.198883056640625e-06, <theano.gof.opt.Updater instance at 0x11e4280e0>: 0.0, <theano.gof.opt.Updater instance at 0x11e41ad88>: 0, <theano.gof.opt.Updater instance at 0x11e427170>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e41a998>: 7.152557373046875e-06, <theano.gof.opt.Updater instance at 0x11e4281b8>: 0, <theano.gof.opt.Updater instance at 0x11e4195a8>: 0, <theano.gof.opt.Updater instance at 0x11e4229e0>: 0, <theano.gof.opt.Updater instance at 0x11e423200>: 0, <theano.gof.opt.Updater instance at 0x11e423a28>: 0, <theano.gof.opt.Updater instance at 0x11e3fd1b8>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e422248>: 7.152557373046875e-06, <theano.gof.destroyhandler.DestroyHandler object at 0x117016a50>: 0.0002276897430419922, <theano.compile.function_module.Supervisor instance at 0x11e41d290>: 0.00012993812561035156, <theano.gof.opt.Updater instance at 0x11e3fd488>: 0, <theano.gof.opt.Updater instance at 0x117018320>: 0, <theano.gof.opt.Updater instance at 0x11e41bf38>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e428998>: 5.7220458984375e-06, <theano.gof.opt.Updater instance at 0x11e421bd8>: 0.0, <theano.gof.opt.Updater instance at 0x1170203f8>: 0, <theano.gof.opt.Updater instance at 0x11e41a200>: 0, <theano.gof.opt.Updater instance at 0x11e3ffc20>: 0, <theano.gof.opt.Updater instance at 0x116f1e440>: 0, <theano.gof.opt.Updater instance at 0x11e42dc68>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e41ce18>: 7.152557373046875e-06, <theano.gof.opt.ChangeTracker instance at 0x11e420488>: 7.152557373046875e-06, <theano.gof.opt.MergeFeature object at 0x11e404490>: 1.7881393432617188e-05, <theano.gof.opt.ChangeTracker instance at 0x11e428ef0>: 6.9141387939453125e-06, <theano.gof.opt.ChangeTracker instance at 0x11e42de18>: 9.059906005859375e-06, <theano.gof.toolbox.ReplaceValidate object at 0x116ef8d50>: 6.9141387939453125e-06, <theano.gof.opt.Updater instance at 0x11e423560>: 0.0, <theano.gof.opt.Updater instance at 0x11e420d88>: 0.0, <theano.gof.opt.Updater instance at 0x11701e248>: 0.0, <theano.gof.opt.Updater instance at 0x11e4275a8>: 0, <theano.gof.opt.Updater instance at 0x11e41b5f0>: 0, <theano.gof.opt.Updater instance at 0x11e419e18>: 0, <theano.tensor.opt.ShapeFeature object at 0x11e4043d0>: 2.4080276489257812e-05, <theano.gof.opt.Updater instance at 0x11e41af38>: 0.0, <theano.gof.opt.Updater instance at 0x11e423bd8>: 0, <theano.gof.opt.Updater instance at 0x116f2bf80>: 0}
+       nb_merged 3
+       nb_constant 0
+   0.000902s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000741004943848
+       loop time 7.20024108887e-05
+       callback_time 0.0
+   0.000895s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000743865966797
+       loop time 6.91413879395e-05
+       callback_time 0.0
+   0.000636s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000300s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000293016433716
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.ChangeTracker instance at 0x11e42a830>: 0.0, <theano.gof.opt.Updater instance at 0x11e3fd050>: 0.0, <theano.gof.opt.Updater instance at 0x117018878>: 0, <theano.gof.toolbox.PreserveNames object at 0x11e40c090>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e3fb8c0>: 0.0, <theano.gof.opt.Updater instance at 0x11e4280e0>: 0.0, <theano.gof.opt.Updater instance at 0x11e41ad88>: 0, <theano.gof.opt.Updater instance at 0x11e427170>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e41a998>: 0.0, <theano.gof.opt.Updater instance at 0x11e4281b8>: 0, <theano.gof.opt.Updater instance at 0x11e4195a8>: 0, <theano.gof.opt.Updater instance at 0x11e4229e0>: 0, <theano.gof.opt.Updater instance at 0x11e423200>: 0, <theano.gof.opt.Updater instance at 0x11e423a28>: 0, <theano.gof.opt.Updater instance at 0x11e3fd1b8>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e422248>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x117016a50>: 0.0, <theano.gof.opt.Updater instance at 0x11e42dc68>: 0, <theano.compile.function_module.Supervisor instance at 0x11e41d290>: 0.0, <theano.gof.opt.Updater instance at 0x11e4222d8>: 0.0, <theano.gof.opt.Updater instance at 0x11e3fd488>: 0, <theano.gof.opt.Updater instance at 0x117018320>: 0, <theano.gof.opt.Updater instance at 0x11e41bf38>: 0, <theano.gof.opt.Updater instance at 0x11e41b098>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e428998>: 0.0, <theano.gof.opt.Updater instance at 0x11e41b5f0>: 0, <theano.gof.opt.Updater instance at 0x11e421bd8>: 0.0, <theano.gof.opt.Updater instance at 0x1170203f8>: 0, <theano.gof.opt.Updater instance at 0x11e41a200>: 0, <theano.gof.opt.Updater instance at 0x11e3ffc20>: 0, <theano.gof.opt.Updater instance at 0x116f1e440>: 0, <theano.gof.opt.Updater instance at 0x116f2dc68>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e41ce18>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e420488>: 0.0, <theano.gof.opt.MergeFeature object at 0x11e404490>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11e4043d0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e428ef0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e42de18>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x116ef8d50>: 0.0, <theano.gof.opt.Updater instance at 0x11e423560>: 0.0, <theano.gof.opt.Updater instance at 0x11e420d88>: 0.0, <theano.gof.opt.Updater instance at 0x11701e248>: 0.0, <theano.gof.opt.Updater instance at 0x11e4275a8>: 0, <theano.gof.opt.Updater instance at 0x11e4185f0>: 0, <theano.gof.opt.Updater instance at 0x11e419e18>: 0, <theano.gof.opt.Updater instance at 0x11e41fe60>: 0, <theano.gof.opt.Updater instance at 0x11e41c680>: 0, <theano.gof.opt.Updater instance at 0x11e510ef0>: 0, <theano.gof.opt.Updater instance at 0x116f2e440>: 0, <theano.gof.opt.Updater instance at 0x11e41af38>: 0.0, <theano.gof.opt.Updater instance at 0x11e423bd8>: 0, <theano.gof.opt.Updater instance at 0x116f2bf80>: 0}
+       nb_merged 0
+       nb_constant 0
+   0.000072s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 6.60419464111e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.ChangeTracker instance at 0x11e42de18>: 0.0, <theano.gof.opt.Updater instance at 0x11e423a28>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e422248>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x117016a50>: 0.0, <theano.gof.opt.Updater instance at 0x11e42dc68>: 0, <theano.gof.opt.Updater instance at 0x11e3fd488>: 0, <theano.compile.function_module.Supervisor instance at 0x11e41d290>: 0.0, <theano.gof.opt.Updater instance at 0x11e4280e0>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x116ef8d50>: 0.0, <theano.gof.opt.MergeFeature object at 0x11e404490>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x11e40c090>: 0.0, <theano.gof.opt.Updater instance at 0x11e420d88>: 0.0, <theano.gof.opt.Updater instance at 0x11701e248>: 0.0, <theano.gof.opt.Updater instance at 0x11e3fd1b8>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11e4043d0>: 0.0, <theano.gof.opt.Updater instance at 0x11e4229e0>: 0}
+       nb_merged 0
+       nb_constant 0
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.996s for 240/61 nodes before/after optimization
+   0.049s for fgraph.validate()
+   0.133s for callback
+   time      - (name, class, index) - validate time
+   0.438593s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.005s
+     EquilibriumOptimizer      canonicalize
+       time 0.438s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.009s
+       time in local optimizers 0.396s
+       time in global optimizers 0.007s
+        0 - 0.065s 22 (0.000s in global opts, 0.001s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.089s 14 (0.005s in global opts, 0.002s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.106s 2 (0.001s in global opts, 0.002s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.096s 2 (0.000s in global opts, 0.002s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.082s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.072s - 5 - local_add_canonizer
+       0.044s - 2 - local_mul_canonizer
+       0.018s - 8 - local_upcast_elemwise_constant_inputs
+       0.014s - 8 - local_mul_switch_sink
+       0.010s - 8 - local_neg_to_mul
+       0.007s - 3 - constant_folding
+       0.007s - 3 - MergeOptimizer
+       0.002s - 1 - local_dimshuffle_lift
+       0.002s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_subtensor_make_vector
+       0.224s - in 47 optimization that where not used
+
+   0.171427s - ('specialize', 'EquilibriumOptimizer', 9) - 0.002s
+     EquilibriumOptimizer      specialize
+       time 0.171s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.009s
+       time in local optimizers 0.133s
+       time in global optimizers 0.010s
+        0 - 0.047s 12 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.040s 4 (0.002s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.047s 4 (0.002s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.037s 0 (0.004s in global opts, 0.003s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.013s - 8 - local_dimshuffle_lift
+       0.010s - 8 - local_mul_to_neg
+       0.006s - 4 - local_reduce_broadcastable
+       0.115s - in 52 optimization that where not used
+
+   0.152366s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.026s
+   0.038636s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.039s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.033s
+       time in global optimizers 0.002s
+        0 - 0.039s 0 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.037859s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.003s
+   0.032201s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.011s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.0015070438385
+       loop time 0.0305960178375
+       callback_time 0.0206065177917
+   0.020231s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.020s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.006s
+       time in local optimizers 0.013s
+       time in global optimizers 0.000s
+        0 - 0.009s 8 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.008s 4 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.003s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.007s - 4 - local_max_to_min
+       0.007s - 8 - local_max_and_argmax
+       0.000s - in 0 optimization that where not used
+
+   0.016935s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.017s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.004763s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.005s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.002s
+           time in local optimizers 0.002s
+           time in global optimizers 0.000s
+            0 - 0.005s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       0.003863s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00274300575256
+           loop time 0.000992059707642
+           callback_time 0.0
+       0.002528s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00218105316162
+           loop time 0.000243902206421
+           callback_time 0.0
+       0.002237s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.000496387481689
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00147390365601
+       0.001879s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00142002105713
+           loop time 0.000389814376831
+           callback_time 0.0
+       0.001642s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00141501426697
+           loop time 0.000159978866577
+           callback_time 0.0
+
+   0.015827s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.016s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.014s
+        0 - 0.016s 0 (0.014s in global opts, 0.001s io_toposort) - 125 nodes - 
+   0.015761s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.016s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.014s
+        0 - 0.016s 0 (0.014s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.014806s - ('merge1', 'MergeOptimizer', 1) - 0.001s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0102689266205
+       validate_time 0.00138163566589
+       callback_time 0.00545430183411
+       callback_times {<theano.gof.toolbox.ReplaceValidate object at 0x11e271f90>: 0.00024390220642089844, <theano.compile.function_module.Supervisor instance at 0x11e4835f0>: 0.0003457069396972656, <theano.gof.opt.MergeFeature object at 0x11e4856d0>: 0.0017926692962646484, <theano.gof.toolbox.PreserveNames object at 0x11e485210>: 0.00016021728515625, <theano.tensor.opt.ShapeFeature object at 0x11e485610>: 0.0009942054748535156}
+       nb_merged 124
+       nb_constant 1
+   0.010738s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.005123s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.00189995765686
+       loop time 0.00312113761902
+       callback_time 0.00213527679443
+   0.003546s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00264000892639
+       loop time 0.000745058059692
+       callback_time 0.0
+   0.003215s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00245904922485
+       loop time 0.000586986541748
+       callback_time 0.0
+   0.002643s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.002465s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.002s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.002s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.002409s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.002239s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00161194801331
+       loop time 0.000521183013916
+       callback_time 0.0
+   0.002046s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00177407264709
+       loop time 0.000165939331055
+       callback_time 0.0
+   0.001835s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.00142216682434
+       loop time 0.000365018844604
+       callback_time 0.0
+   0.001547s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.00131011009216
+       loop time 0.000103950500488
+       callback_time 0.0
+   0.001228s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.00101709365845
+       loop time 9.48905944824e-05
+       callback_time 0.0
+   0.001051s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00104403495789
+       validate_time 0.000204086303711
+       callback_time 0.000680685043335
+       callback_times {<theano.gof.opt.Updater instance at 0x11e48a830>: 0.0, <theano.gof.opt.Updater instance at 0x11e47c878>: 0, <theano.gof.opt.Updater instance at 0x11e483098>: 0, <theano.gof.opt.Updater instance at 0x11e7a08c0>: 0, <theano.gof.opt.Updater instance at 0x11e48f0e0>: 0.0, <theano.gof.opt.Updater instance at 0x11e47f128>: 0.0, <theano.gof.opt.Updater instance at 0x11e47c998>: 0, <theano.gof.opt.Updater instance at 0x11e4a8638>: 0, <theano.gof.opt.Updater instance at 0x11e47f1b8>: 0, <theano.gof.opt.Updater instance at 0x11e48a9e0>: 0, <theano.gof.opt.Updater instance at 0x11e47f200>: 0, <theano.gof.toolbox.PreserveNames object at 0x11e485210>: 3.814697265625e-06, <theano.gof.opt.Updater instance at 0x11e489248>: 0, <theano.gof.opt.Updater instance at 0x11e477a70>: 0, <theano.gof.opt.Updater instance at 0x11e77c290>: 0.0, <theano.gof.opt.Updater instance at 0x11e47cb00>: 0, <theano.gof.opt.Updater instance at 0x11e4a4320>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e4e9b48>: 7.152557373046875e-06, <theano.gof.opt.Updater instance at 0x11e4789e0>: 0, <theano.gof.opt.Updater instance at 0x11e479368>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e477b90>: 7.867813110351562e-06, <theano.gof.opt.ChangeTracker instance at 0x11e7a05f0>: 6.67572021484375e-06, <theano.gof.opt.Updater instance at 0x11e4463f8>: 0, <theano.gof.opt.Updater instance at 0x11e48b368>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e446488>: 5.9604644775390625e-06, <theano.gof.destroyhandler.DestroyHandler object at 0x11e77ac90>: 0.0002288818359375, <theano.gof.opt.Updater instance at 0x11e47a680>: 0.0, <theano.gof.opt.Updater instance at 0x11e7a54d0>: 0, <theano.gof.opt.Updater instance at 0x11e48a680>: 0.0, <theano.gof.opt.Updater instance at 0x11e47a518>: 0.0, <theano.gof.opt.Updater instance at 0x11e47a638>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e437d40>: 5.9604644775390625e-06, <theano.gof.opt.Updater instance at 0x11e47cb90>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e48add0>: 6.198883056640625e-06, <theano.compile.function_module.Supervisor instance at 0x11e4835f0>: 0.0001327991485595703, <theano.tensor.opt.ShapeFeature object at 0x11e485610>: 3.0994415283203125e-05, <theano.gof.opt.Updater instance at 0x11e47c710>: 0.0, <theano.gof.opt.Updater instance at 0x11e77c680>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e4816c8>: 6.67572021484375e-06, <theano.gof.opt.MergeFeature object at 0x11e4856d0>: 1.9311904907226562e-05, <theano.gof.opt.ChangeTracker instance at 0x11e47aef0>: 6.9141387939453125e-06, <theano.gof.opt.ChangeTracker instance at 0x11e479710>: 7.867813110351562e-06, <theano.gof.toolbox.ReplaceValidate object at 0x11e271f90>: 8.106231689453125e-06, <theano.gof.opt.Updater instance at 0x11e4777a0>: 0}
+       nb_merged 3
+       nb_constant 0
+   0.000853s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000469s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000458955764771
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.Updater instance at 0x11e48a830>: 0.0, <theano.gof.opt.Updater instance at 0x11e47c878>: 0, <theano.gof.opt.Updater instance at 0x11e483098>: 0, <theano.gof.opt.Updater instance at 0x11e7a08c0>: 0, <theano.gof.opt.Updater instance at 0x11e48f0e0>: 0.0, <theano.gof.opt.Updater instance at 0x11e47f128>: 0.0, <theano.gof.opt.Updater instance at 0x11e43b950>: 0, <theano.gof.opt.Updater instance at 0x11e47c998>: 0, <theano.gof.opt.Updater instance at 0x11e4a8638>: 0, <theano.gof.opt.Updater instance at 0x11e47f1b8>: 0, <theano.gof.opt.Updater instance at 0x11e4789e0>: 0, <theano.gof.opt.Updater instance at 0x11e47f200>: 0, <theano.gof.toolbox.PreserveNames object at 0x11e485210>: 0.0, <theano.gof.opt.Updater instance at 0x11e489248>: 0, <theano.gof.opt.Updater instance at 0x11e477a70>: 0, <theano.gof.opt.Updater instance at 0x11e77c290>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e7a05f0>: 0.0, <theano.gof.opt.Updater instance at 0x11e48b2d8>: 0, <theano.gof.opt.Updater instance at 0x11e47cb00>: 0, <theano.gof.opt.Updater instance at 0x11e4a4320>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e4e9b48>: 0.0, <theano.gof.opt.Updater instance at 0x11e48a9e0>: 0, <theano.gof.opt.Updater instance at 0x11e479368>: 0, <theano.gof.opt.Updater instance at 0x11e48e098>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e477b90>: 0.0, <theano.gof.opt.Updater instance at 0x11e47e3b0>: 0, <theano.gof.opt.Updater instance at 0x11e4463f8>: 0, <theano.gof.opt.Updater instance at 0x11eb64200>: 0, <theano.gof.opt.Updater instance at 0x11e4a8440>: 0, <theano.gof.opt.Updater instance at 0x11e48b368>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e446488>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x11e77ac90>: 0.0, <theano.gof.opt.Updater instance at 0x11e47a680>: 0.0, <theano.gof.opt.Updater instance at 0x11e7a54d0>: 0, <theano.gof.opt.Updater instance at 0x11e48a680>: 0.0, <theano.gof.opt.Updater instance at 0x11e47a518>: 0.0, <theano.gof.opt.Updater instance at 0x11e47a638>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e437d40>: 0.0, <theano.gof.opt.Updater instance at 0x11e47cb90>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e48add0>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11e4835f0>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11e485610>: 0.0, <theano.gof.opt.Updater instance at 0x11e47c710>: 0.0, <theano.gof.opt.Updater instance at 0x11e77c680>: 0, <theano.gof.opt.ChangeTracker instance at 0x11e4816c8>: 0.0, <theano.gof.opt.MergeFeature object at 0x11e4856d0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e47aef0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e479710>: 0.0, <theano.gof.opt.Updater instance at 0x11e48af38>: 0.0, <theano.gof.opt.Updater instance at 0x11e48f290>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x11e271f90>: 0.0, <theano.gof.opt.Updater instance at 0x11e4777a0>: 0}
+       nb_merged 0
+       nb_constant 0
+   0.000098s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 9.01222229004e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.tensor.opt.ShapeFeature object at 0x11e485610>: 0.0, <theano.gof.opt.Updater instance at 0x11e477a70>: 0, <theano.gof.opt.Updater instance at 0x11e47a680>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x11e77ac90>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e479710>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x11e485210>: 0.0, <theano.gof.opt.MergeFeature object at 0x11e4856d0>: 0.0, <theano.gof.opt.Updater instance at 0x11e48a680>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11e477b90>: 0.0, <theano.gof.opt.Updater instance at 0x11e47a518>: 0.0, <theano.gof.opt.Updater instance at 0x11e479368>: 0, <theano.gof.opt.Updater instance at 0x11e483098>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x11e271f90>: 0.0, <theano.gof.opt.Updater instance at 0x11e47cb90>: 0.0, <theano.gof.opt.Updater instance at 0x11e4789e0>: 0, <theano.compile.function_module.Supervisor instance at 0x11e4835f0>: 0.0}
+       nb_merged 0
+       nb_constant 0
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.888s for 240/61 nodes before/after optimization
+   0.038s for fgraph.validate()
+   0.113s for callback
+   time      - (name, class, index) - validate time
+   0.403327s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.006s
+     EquilibriumOptimizer      canonicalize
+       time 0.403s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.010s
+       time in local optimizers 0.355s
+       time in global optimizers 0.011s
+        0 - 0.071s 22 (0.000s in global opts, 0.001s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.085s 14 (0.009s in global opts, 0.003s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.088s 2 (0.002s in global opts, 0.002s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.079s 2 (0.000s in global opts, 0.002s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.080s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.054s - 5 - local_add_canonizer
+       0.039s - 2 - local_mul_canonizer
+       0.017s - 8 - local_upcast_elemwise_constant_inputs
+       0.016s - 8 - local_mul_switch_sink
+       0.011s - 3 - MergeOptimizer
+       0.010s - 8 - local_neg_to_mul
+       0.007s - 3 - constant_folding
+       0.003s - 1 - local_dimshuffle_lift
+       0.002s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_subtensor_make_vector
+       0.205s - in 47 optimization that where not used
+
+   0.158224s - ('specialize', 'EquilibriumOptimizer', 9) - 0.002s
+     EquilibriumOptimizer      specialize
+       time 0.158s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.006s
+       time in local optimizers 0.124s
+       time in global optimizers 0.009s
+        0 - 0.046s 12 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.035s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.042s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.035s 0 (0.004s in global opts, 0.002s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.011s - 8 - local_mul_to_neg
+       0.010s - 8 - local_dimshuffle_lift
+       0.006s - 4 - local_reduce_broadcastable
+       0.107s - in 52 optimization that where not used
+
+   0.098312s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.016s
+   0.043745s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.044s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.037s
+       time in global optimizers 0.002s
+        0 - 0.044s 0 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.029033s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.009s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.00150299072266
+       loop time 0.0274410247803
+       callback_time 0.0184433460236
+   0.022446s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.002s
+   0.021307s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.021s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.019s
+        0 - 0.021s 0 (0.019s in global opts, 0.002s io_toposort) - 125 nodes - 
+   0.021072s - ('merge1', 'MergeOptimizer', 1) - 0.002s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0145270824432
+       validate_time 0.00181865692139
+       callback_time 0.00778579711914
+       callback_times {<theano.gof.toolbox.ReplaceValidate object at 0x11e879bd0>: 0.00037789344787597656, <theano.compile.function_module.Supervisor instance at 0x11efbbb48>: 0.0004799365997314453, <theano.gof.opt.MergeFeature object at 0x11e7c3bd0>: 0.002560853958129883, <theano.gof.toolbox.PreserveNames object at 0x11e82da50>: 0.0003361701965332031, <theano.tensor.opt.ShapeFeature object at 0x11e7c3650>: 0.001453399658203125}
+       nb_merged 124
+       nb_constant 1
+   0.020236s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.020s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.003s
+       time in local optimizers 0.000s
+       time in global optimizers 0.017s
+        0 - 0.020s 0 (0.017s in global opts, 0.003s io_toposort) - 123 nodes - 
+   0.016842s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.015219s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.015s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.003122s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.000632047653198
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00208902359009
+       0.003038s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00266718864441
+           loop time 0.000262022018433
+           callback_time 0.0
+       0.002772s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.003s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.001s
+           time in local optimizers 0.001s
+           time in global optimizers 0.000s
+            0 - 0.003s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       0.002542s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00192999839783
+           loop time 0.000524997711182
+           callback_time 0.0
+       0.002056s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00141906738281
+           loop time 0.000566959381104
+           callback_time 0.0
+       0.001665s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00141787528992
+           loop time 0.000178098678589
+           callback_time 0.0
+
+   0.014699s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.015s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.005s
+       time in local optimizers 0.009s
+       time in global optimizers 0.000s
+        0 - 0.007s 8 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.005s 4 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.005s - 8 - local_max_and_argmax
+       0.004s - 4 - local_max_to_min
+       0.000s - in 0 optimization that where not used
+
+   0.004632s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.00150918960571
+       loop time 0.00303196907043
+       callback_time 0.00210356712341
+   0.002607s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.00212597846985
+       loop time 0.000410079956055
+       callback_time 0.0
+   0.002005s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00149488449097
+       loop time 0.000412940979004
+       callback_time 0.0
+   0.001922s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.002s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.001904s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00137782096863
+       loop time 0.000441789627075
+       callback_time 0.0
+   0.001795s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00138306617737
+       loop time 0.000329971313477
+       callback_time 0.0
+   0.001730s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.001719s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00149488449097
+       loop time 0.000135898590088
+       callback_time 0.0
+   0.001527s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.001091s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00108313560486
+       validate_time 0.000204801559448
+       callback_time 0.000707626342773
+       callback_times {<theano.gof.opt.Updater instance at 0x11ecb7c20>: 0, <theano.gof.opt.ChangeTracker instance at 0x11ed9c0e0>: 6.9141387939453125e-06, <theano.gof.opt.Updater instance at 0x11eff2128>: 0, <theano.gof.opt.Updater instance at 0x11ed9a1b8>: 0.0, <theano.gof.opt.Updater instance at 0x11efbb9e0>: 0, <theano.gof.toolbox.PreserveNames object at 0x11e82da50>: 4.0531158447265625e-06, <theano.gof.opt.Updater instance at 0x11ed9fa70>: 0, <theano.gof.opt.Updater instance at 0x11efc0290>: 0.0, <theano.gof.opt.Updater instance at 0x11eff4ab8>: 0, <theano.gof.opt.Updater instance at 0x11ed9a2d8>: 0, <theano.gof.opt.Updater instance at 0x11ed9add0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9fb00>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11efbbb48>: 0.0001239776611328125, <theano.gof.opt.Updater instance at 0x11ed954d0>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x11e879bd0>: 1.0013580322265625e-05, <theano.gof.opt.Updater instance at 0x11eff1c20>: 0, <theano.gof.opt.Updater instance at 0x11ed95cb0>: 0, <theano.gof.opt.MergeFeature object at 0x11e7c3bd0>: 2.0742416381835938e-05, <theano.gof.opt.Updater instance at 0x11ec8ecb0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ed9a4d0>: 8.58306884765625e-06, <theano.gof.opt.ChangeTracker instance at 0x11efbe4d0>: 7.62939453125e-06, <theano.gof.opt.Updater instance at 0x11ed84638>: 0, <theano.gof.opt.Updater instance at 0x11ea25d40>: 0, <theano.gof.opt.Updater instance at 0x11ed980e0>: 0, <theano.gof.opt.Updater instance at 0x11ed9bcf8>: 0, <theano.gof.opt.ChangeTracker instance at 0x11ed84dd0>: 6.9141387939453125e-06, <theano.gof.opt.ChangeTracker instance at 0x11ec8e5f0>: 5.9604644775390625e-06, <theano.gof.opt.Updater instance at 0x11ed9ae18>: 0.0, <theano.gof.opt.Updater instance at 0x11efbedd0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9d638>: 0, <theano.tensor.opt.ShapeFeature object at 0x11e7c3650>: 2.7179718017578125e-05, <theano.gof.opt.ChangeTracker instance at 0x11ed84680>: 5.9604644775390625e-06, <theano.gof.opt.ChangeTracker instance at 0x11ea16680>: 6.4373016357421875e-06, <theano.gof.opt.Updater instance at 0x11ed98ea8>: 0, <theano.gof.opt.Updater instance at 0x11efc06c8>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11e207ed0>: 0.00024890899658203125, <theano.gof.opt.ChangeTracker instance at 0x11efbebd8>: 6.9141387939453125e-06, <theano.gof.opt.ChangeTracker instance at 0x11eff2710>: 7.3909759521484375e-06, <theano.gof.opt.Updater instance at 0x11ed9ff38>: 0, <theano.gof.opt.Updater instance at 0x11efbe758>: 0, <theano.gof.opt.Updater instance at 0x11ea25f80>: 0, <theano.gof.opt.Updater instance at 0x11e218680>: 0, <theano.gof.opt.Updater instance at 0x11ed9a0e0>: 0.0, <theano.gof.opt.Updater instance at 0x11efbe7e8>: 0}
+       nb_merged 3
+       nb_constant 0
+   0.001082s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000890970230103
+       loop time 8.6784362793e-05
+       callback_time 0.0
+   0.000894s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000741004943848
+       loop time 6.89029693604e-05
+       callback_time 0.0
+   0.000749s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000274s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000268936157227
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.Updater instance at 0x11eff1c20>: 0, <theano.gof.opt.ChangeTracker instance at 0x11ed9c0e0>: 0.0, <theano.gof.opt.Updater instance at 0x11eff2128>: 0, <theano.gof.opt.Updater instance at 0x11ed9a1b8>: 0.0, <theano.gof.opt.Updater instance at 0x11ed829e0>: 0, <theano.gof.opt.Updater instance at 0x11ed84200>: 0, <theano.gof.toolbox.PreserveNames object at 0x11e82da50>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9fa70>: 0, <theano.gof.opt.Updater instance at 0x11efc0290>: 0.0, <theano.gof.opt.Updater instance at 0x11eff4ab8>: 0, <theano.gof.opt.Updater instance at 0x11ed9a2d8>: 0, <theano.gof.opt.Updater instance at 0x11ed9add0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9fb00>: 0.0, <theano.gof.opt.Updater instance at 0x11eff4b48>: 0, <theano.gof.opt.Updater instance at 0x11efbb9e0>: 0, <theano.compile.function_module.Supervisor instance at 0x11efbbb48>: 0.0, <theano.gof.opt.Updater instance at 0x11ec8e3b0>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x11e879bd0>: 0.0, <theano.gof.opt.Updater instance at 0x11ecb7c20>: 0, <theano.gof.opt.Updater instance at 0x11ed95cb0>: 0, <theano.gof.opt.MergeFeature object at 0x11e7c3bd0>: 0.0, <theano.gof.opt.Updater instance at 0x11ec8ecb0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed954d0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11efbe4d0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed84638>: 0, <theano.gof.opt.Updater instance at 0x11ea16d40>: 0.0, <theano.gof.opt.Updater instance at 0x11ed980e0>: 0, <theano.gof.opt.Updater instance at 0x11ecf5b90>: 0, <theano.gof.opt.Updater instance at 0x11eff55a8>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9bcf8>: 0, <theano.gof.opt.ChangeTracker instance at 0x11ed84dd0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ed9a4d0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ec8e5f0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9ae18>: 0.0, <theano.gof.opt.Updater instance at 0x11efbedd0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9d638>: 0, <theano.gof.opt.Updater instance at 0x11e218680>: 0, <theano.tensor.opt.ShapeFeature object at 0x11e7c3650>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ed84680>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ea16680>: 0.0, <theano.gof.opt.Updater instance at 0x11ed98ea8>: 0, <theano.gof.opt.Updater instance at 0x11ecf2a70>: 0, <theano.gof.opt.Updater instance at 0x11efc06c8>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11e207ed0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11efbebd8>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11eff2710>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9ff38>: 0, <theano.gof.opt.Updater instance at 0x11efbe758>: 0, <theano.gof.opt.Updater instance at 0x11ea25f80>: 0, <theano.gof.opt.Updater instance at 0x11ea25d40>: 0, <theano.gof.opt.Updater instance at 0x11ed9a0e0>: 0.0, <theano.gof.opt.Updater instance at 0x11efbe7e8>: 0}
+       nb_merged 0
+       nb_constant 0
+   0.000076s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 6.89029693604e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.Updater instance at 0x11ed9ae18>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11e7c3650>: 0.0, <theano.gof.opt.Updater instance at 0x11efbb9e0>: 0, <theano.gof.opt.MergeFeature object at 0x11e7c3bd0>: 0.0, <theano.gof.opt.Updater instance at 0x11eff4ab8>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11e207ed0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11efbe4d0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9fb00>: 0.0, <theano.gof.opt.Updater instance at 0x11eff2128>: 0, <theano.compile.function_module.Supervisor instance at 0x11efbbb48>: 0.0, <theano.gof.opt.Updater instance at 0x11efbe7e8>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x11e879bd0>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9a1b8>: 0.0, <theano.gof.opt.Updater instance at 0x11ed9add0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ed9a4d0>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x11e82da50>: 0.0}
+       nb_merged 0
+       nb_constant 0
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 1.117s for 240/61 nodes before/after optimization
+   0.042s for fgraph.validate()
+   0.123s for callback
+   time      - (name, class, index) - validate time
+   0.383013s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.005s
+     EquilibriumOptimizer      canonicalize
+       time 0.383s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.010s
+       time in local optimizers 0.341s
+       time in global optimizers 0.009s
+        0 - 0.085s 22 (0.000s in global opts, 0.002s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.077s 14 (0.007s in global opts, 0.002s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.076s 2 (0.001s in global opts, 0.002s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.076s 2 (0.001s in global opts, 0.002s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.068s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.054s - 5 - local_add_canonizer
+       0.037s - 2 - local_mul_canonizer
+       0.018s - 8 - local_upcast_elemwise_constant_inputs
+       0.018s - 8 - local_mul_switch_sink
+       0.011s - 8 - local_neg_to_mul
+       0.009s - 3 - MergeOptimizer
+       0.005s - 3 - constant_folding
+       0.004s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_dimshuffle_lift
+       0.001s - 1 - local_subtensor_make_vector
+       0.191s - in 47 optimization that where not used
+
+   0.212006s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.171047s - ('specialize', 'EquilibriumOptimizer', 9) - 0.002s
+     EquilibriumOptimizer      specialize
+       time 0.171s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.006s
+       time in local optimizers 0.137s
+       time in global optimizers 0.008s
+        0 - 0.053s 12 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.047s 4 (0.002s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.036s 4 (0.002s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.035s 0 (0.002s in global opts, 0.002s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.013s - 8 - local_dimshuffle_lift
+       0.012s - 8 - local_mul_to_neg
+       0.005s - 4 - local_reduce_broadcastable
+       0.115s - in 52 optimization that where not used
+
+   0.111568s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.019s
+   0.045302s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.045s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.039s
+       time in global optimizers 0.002s
+        0 - 0.045s 0 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.040426s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.003s
+   0.035610s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.011s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.00298690795898
+       loop time 0.0324721336365
+       callback_time 0.0209991931915
+   0.022671s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.023s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.020s
+        0 - 0.023s 0 (0.020s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.019730s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.020s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.018s
+        0 - 0.020s 0 (0.018s in global opts, 0.002s io_toposort) - 125 nodes - 
+   0.017023s - ('merge1', 'MergeOptimizer', 1) - 0.002s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0119280815125
+       validate_time 0.00152730941772
+       callback_time 0.00634622573853
+       callback_times {<theano.gof.toolbox.PreserveNames object at 0x11f731e90>: 0.00018262863159179688, <theano.compile.function_module.Supervisor instance at 0x11f742c20>: 0.0004010200500488281, <theano.tensor.opt.ShapeFeature object at 0x11f75f2d0>: 0.0012390613555908203, <theano.gof.opt.MergeFeature object at 0x11f731f50>: 0.002131223678588867, <theano.gof.toolbox.ReplaceValidate object at 0x11f6d3c50>: 0.0002951622009277344}
+       nb_merged 124
+       nb_constant 1
+   0.015540s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.015s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.005s
+       time in local optimizers 0.010s
+       time in global optimizers 0.000s
+        0 - 0.008s 8 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.006s 4 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.002s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.006s - 8 - local_max_and_argmax
+       0.004s - 4 - local_max_to_min
+       0.000s - in 0 optimization that where not used
+
+   0.013603s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.014s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.002860s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.003s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.002s
+           time in local optimizers 0.001s
+           time in global optimizers 0.000s
+            0 - 0.003s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       0.002359s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00161695480347
+           loop time 0.000660181045532
+           callback_time 0.0
+       0.002354s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.000495195388794
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00155687332153
+       0.002041s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00170803070068
+           loop time 0.000225067138672
+           callback_time 0.0
+       0.002028s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00154519081116
+           loop time 0.000407934188843
+           callback_time 0.0
+       0.001937s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00166511535645
+           loop time 0.00017786026001
+           callback_time 0.0
+
+   0.007506s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.001s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.00151205062866
+       loop time 0.00584602355957
+       callback_time 0.00410223007202
+   0.002112s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.00161194801331
+       loop time 0.000439167022705
+       callback_time 0.0
+   0.002064s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.00164198875427
+       loop time 0.000211000442505
+       callback_time 0.0
+   0.002052s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.0015709400177
+       loop time 0.000393867492676
+       callback_time 0.0
+   0.002027s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.001996s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.002s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.001944s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.00159096717834
+       loop time 0.000168800354004
+       callback_time 0.0
+   0.001908s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00137591362
+       loop time 0.000446081161499
+       callback_time 0.0
+   0.001899s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.0016610622406
+       loop time 0.000143051147461
+       callback_time 0.0
+   0.001806s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00142002105713
+       loop time 0.000301837921143
+       callback_time 0.0
+   0.001788s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.001092s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00108504295349
+       validate_time 0.000218868255615
+       callback_time 0.000704288482666
+       callback_times {<theano.gof.opt.Updater instance at 0x11f67c050>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f54b2d8>: 5.9604644775390625e-06, <theano.gof.opt.Updater instance at 0x11f6a6d88>: 0, <theano.gof.opt.Updater instance at 0x11f743128>: 0.0, <theano.gof.opt.Updater instance at 0x11f69a950>: 0, <theano.gof.opt.Updater instance at 0x11f693950>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11f66b190>: 0.00024437904357910156, <theano.gof.opt.Updater instance at 0x11f556ef0>: 0.0, <theano.gof.opt.Updater instance at 0x11f4b8200>: 0, <theano.gof.opt.Updater instance at 0x11e7be7e8>: 0.0, <theano.gof.opt.Updater instance at 0x11f69ea28>: 0.0, <theano.gof.opt.Updater instance at 0x11f73f710>: 0, <theano.gof.opt.Updater instance at 0x11f67fbd8>: 0, <theano.gof.opt.Updater instance at 0x11f54fab8>: 0, <theano.tensor.opt.ShapeFeature object at 0x11f75f2d0>: 2.7894973754882812e-05, <theano.gof.opt.ChangeTracker instance at 0x11f5dab00>: 5.7220458984375e-06, <theano.gof.opt.ChangeTracker instance at 0x11f68ab48>: 5.7220458984375e-06, <theano.gof.opt.ChangeTracker instance at 0x11f54e200>: 7.867813110351562e-06, <theano.gof.opt.Updater instance at 0x11f69abd8>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f69e3f8>: 7.867813110351562e-06, <theano.gof.opt.Updater instance at 0x11efd0200>: 0, <theano.compile.function_module.Supervisor instance at 0x11f742c20>: 0.0001430511474609375, <theano.gof.opt.ChangeTracker instance at 0x11f693440>: 5.9604644775390625e-06, <theano.gof.toolbox.ReplaceValidate object at 0x11f6d3c50>: 8.106231689453125e-06, <theano.gof.opt.MergeFeature object at 0x11f731f50>: 1.8596649169921875e-05, <theano.gof.opt.Updater instance at 0x11f50da28>: 0, <theano.gof.opt.Updater instance at 0x11f537cf8>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f54c518>: 6.198883056640625e-06, <theano.gof.opt.Updater instance at 0x11f746d40>: 0, <theano.gof.opt.Updater instance at 0x11efcad88>: 0, <theano.gof.opt.Updater instance at 0x11f5cfdd0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f5cfe18>: 8.821487426757812e-06, <theano.gof.opt.Updater instance at 0x11e7c0e60>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f5cfe60>: 5.9604644775390625e-06, <theano.gof.toolbox.PreserveNames object at 0x11f731e90>: 5.7220458984375e-06, <theano.gof.opt.Updater instance at 0x11f6a6ef0>: 0.0, <theano.gof.opt.Updater instance at 0x11f544710>: 0.0, <theano.gof.opt.Updater instance at 0x11f688f38>: 0.0, <theano.gof.opt.Updater instance at 0x11f4b97e8>: 0.0, <theano.gof.opt.Updater instance at 0x11f6ad290>: 0, <theano.gof.opt.Updater instance at 0x11f54b3f8>: 0, <theano.gof.opt.Updater instance at 0x11e976fc8>: 0, <theano.gof.opt.Updater instance at 0x11f7627e8>: 0, <theano.gof.opt.Updater instance at 0x11f4b4950>: 0.0}
+       nb_merged 3
+       nb_constant 0
+   0.000653s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000505s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000493049621582
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.Updater instance at 0x11f67c050>: 0, <theano.gof.opt.Updater instance at 0x11f4b8098>: 0.0, <theano.gof.opt.Updater instance at 0x11f6a6d88>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f54b2d8>: 0.0, <theano.gof.opt.Updater instance at 0x11f73ed88>: 0, <theano.gof.opt.Updater instance at 0x11f743128>: 0.0, <theano.gof.opt.Updater instance at 0x11f69a950>: 0, <theano.gof.opt.Updater instance at 0x11f693950>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11f66b190>: 0.0, <theano.gof.opt.Updater instance at 0x11705ca28>: 0, <theano.gof.opt.Updater instance at 0x11f4b8200>: 0, <theano.gof.opt.Updater instance at 0x11e7be7e8>: 0.0, <theano.gof.opt.Updater instance at 0x11f69ea28>: 0.0, <theano.gof.opt.Updater instance at 0x11f73f710>: 0, <theano.gof.opt.Updater instance at 0x11f67fbd8>: 0, <theano.gof.opt.Updater instance at 0x11f54fab8>: 0, <theano.tensor.opt.ShapeFeature object at 0x11f75f2d0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f5dab00>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f68ab48>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f54e200>: 0.0, <theano.gof.opt.Updater instance at 0x11f69abd8>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f69e3f8>: 0.0, <theano.gof.opt.Updater instance at 0x11f556ef0>: 0.0, <theano.gof.opt.Updater instance at 0x11efd0200>: 0, <theano.compile.function_module.Supervisor instance at 0x11f742c20>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f693440>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x11f6d3c50>: 0.0, <theano.gof.opt.MergeFeature object at 0x11f731f50>: 0.0, <theano.gof.opt.Updater instance at 0x11f50da28>: 0, <theano.gof.opt.Updater instance at 0x11f537cf8>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f54c518>: 0.0, <theano.gof.opt.Updater instance at 0x11f746d40>: 0, <theano.gof.opt.Updater instance at 0x11efcad88>: 0, <theano.gof.opt.Updater instance at 0x11f7405a8>: 0.0, <theano.gof.opt.Updater instance at 0x11f5cfdd0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f5cfe18>: 0.0, <theano.gof.opt.Updater instance at 0x11f4b7638>: 0, <theano.gof.opt.Updater instance at 0x11e7c0e60>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f5cfe60>: 0.0, <theano.gof.opt.Updater instance at 0x11f763518>: 0, <theano.gof.toolbox.PreserveNames object at 0x11f731e90>: 0.0, <theano.gof.opt.Updater instance at 0x11f6a6ef0>: 0.0, <theano.gof.opt.Updater instance at 0x11f544710>: 0.0, <theano.gof.opt.Updater instance at 0x11f4b2bd8>: 0, <theano.gof.opt.Updater instance at 0x11f688f38>: 0.0, <theano.gof.opt.Updater instance at 0x11f4b97e8>: 0.0, <theano.gof.opt.Updater instance at 0x11f6ad290>: 0, <theano.gof.opt.Updater instance at 0x11e7e57a0>: 0, <theano.gof.opt.Updater instance at 0x11f54b3f8>: 0, <theano.gof.opt.Updater instance at 0x11e976fc8>: 0, <theano.gof.opt.Updater instance at 0x11f7627e8>: 0, <theano.gof.opt.Updater instance at 0x11f4b4950>: 0.0}
+       nb_merged 0
+       nb_constant 0
+   0.000074s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 6.79492950439e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.compile.function_module.Supervisor instance at 0x11f742c20>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f693440>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x11f6d3c50>: 0.0, <theano.gof.opt.Updater instance at 0x11e7c0e60>: 0, <theano.gof.toolbox.PreserveNames object at 0x11f731e90>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11f75f2d0>: 0.0, <theano.gof.opt.Updater instance at 0x11f556ef0>: 0.0, <theano.gof.opt.Updater instance at 0x11f688f38>: 0.0, <theano.gof.opt.MergeFeature object at 0x11f731f50>: 0.0, <theano.gof.opt.Updater instance at 0x11f69ea28>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x11f66b190>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f69e3f8>: 0.0, <theano.gof.opt.Updater instance at 0x11f67c050>: 0, <theano.gof.opt.Updater instance at 0x11f69abd8>: 0, <theano.gof.opt.Updater instance at 0x11e7be7e8>: 0.0, <theano.gof.opt.Updater instance at 0x11f693950>: 0}
+       nb_merged 0
+       nb_constant 0
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.890s for 240/61 nodes before/after optimization
+   0.038s for fgraph.validate()
+   0.110s for callback
+   time      - (name, class, index) - validate time
+   0.401346s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.006s
+     EquilibriumOptimizer      canonicalize
+       time 0.401s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.014s
+       time in local optimizers 0.352s
+       time in global optimizers 0.011s
+        0 - 0.079s 22 (0.000s in global opts, 0.001s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.083s 14 (0.008s in global opts, 0.003s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.086s 2 (0.002s in global opts, 0.004s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.074s 2 (0.001s in global opts, 0.003s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.079s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.057s - 5 - local_add_canonizer
+       0.039s - 2 - local_mul_canonizer
+       0.021s - 8 - local_upcast_elemwise_constant_inputs
+       0.015s - 8 - local_mul_switch_sink
+       0.011s - 3 - MergeOptimizer
+       0.010s - 8 - local_neg_to_mul
+       0.005s - 3 - constant_folding
+       0.002s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_dimshuffle_lift
+       0.001s - 1 - local_subtensor_make_vector
+       0.200s - in 47 optimization that where not used
+
+   0.158931s - ('specialize', 'EquilibriumOptimizer', 9) - 0.001s
+     EquilibriumOptimizer      specialize
+       time 0.159s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.007s
+       time in local optimizers 0.123s
+       time in global optimizers 0.009s
+        0 - 0.042s 12 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.040s 4 (0.002s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.040s 4 (0.003s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.036s 0 (0.002s in global opts, 0.002s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.010s - 8 - local_dimshuffle_lift
+       0.009s - 8 - local_mul_to_neg
+       0.005s - 4 - local_reduce_broadcastable
+       0.108s - in 52 optimization that where not used
+
+   0.110059s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.016s
+   0.042239s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.042s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.036s
+       time in global optimizers 0.002s
+        0 - 0.042s 0 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.032924s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.010s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.00148797035217
+       loop time 0.0313448905945
+       callback_time 0.0199434757233
+   0.021794s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.002s
+   0.020546s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.020s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.006s
+       time in local optimizers 0.013s
+       time in global optimizers 0.000s
+        0 - 0.012s 8 (0.000s in global opts, 0.003s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.006s 4 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.002s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.009s - 8 - local_max_and_argmax
+       0.004s - 4 - local_max_to_min
+       0.000s - in 0 optimization that where not used
+
+   0.017324s - ('merge1', 'MergeOptimizer', 1) - 0.001s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0106058120728
+       validate_time 0.00141549110413
+       callback_time 0.00560307502747
+       callback_times {<theano.gof.toolbox.ReplaceValidate object at 0x11f7e9b90>: 0.0002791881561279297, <theano.compile.function_module.Supervisor instance at 0x11f9a2a28>: 0.0003559589385986328, <theano.tensor.opt.ShapeFeature object at 0x11f9b5210>: 0.0010187625885009766, <theano.gof.opt.MergeFeature object at 0x11f9b52d0>: 0.0018258094787597656, <theano.gof.toolbox.PreserveNames object at 0x11f987dd0>: 0.00015473365783691406}
+       nb_merged 124
+       nb_constant 1
+   0.016780s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.017s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.015s
+        0 - 0.017s 0 (0.015s in global opts, 0.001s io_toposort) - 125 nodes - 
+   0.016485s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.016s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.014s
+        0 - 0.016s 0 (0.014s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.013959s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.014s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.002816s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.003s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.001s
+           time in local optimizers 0.001s
+           time in global optimizers 0.000s
+            0 - 0.003s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       0.002753s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.000463247299194
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00199890136719
+       0.002540s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00165605545044
+           loop time 0.00079607963562
+           callback_time 0.0
+       0.002234s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00190305709839
+           loop time 0.000248908996582
+           callback_time 0.0
+       0.001938s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00147604942322
+           loop time 0.000391960144043
+           callback_time 0.0
+       0.001657s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00141310691833
+           loop time 0.000175952911377
+           callback_time 0.0
+
+   0.013161s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.004957s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.00163006782532
+       loop time 0.0032320022583
+       callback_time 0.00224924087524
+   0.002575s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.001995s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.002s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.001931s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00139904022217
+       loop time 0.000445127487183
+       callback_time 0.0
+   0.001898s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00150322914124
+       loop time 0.000303030014038
+       callback_time 0.0
+   0.001839s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00136804580688
+       loop time 0.000387191772461
+       callback_time 0.0
+   0.001832s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.00141191482544
+       loop time 0.000371932983398
+       callback_time 0.0
+   0.001738s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00151109695435
+       loop time 0.000136852264404
+       callback_time 0.0
+   0.001583s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.001080s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000885009765625
+       loop time 8.51154327393e-05
+       callback_time 0.0
+   0.001015s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00100803375244
+       validate_time 0.000193119049072
+       callback_time 0.000647306442261
+       callback_times {<theano.gof.opt.Updater instance at 0x11f996878>: 0, <theano.gof.opt.Updater instance at 0x11f9a3098>: 0.0, <theano.gof.opt.Updater instance at 0x11f9978c0>: 0, <theano.gof.opt.Updater instance at 0x11f994c20>: 0, <theano.gof.opt.Updater instance at 0x11f9a30e0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11fa4f128>: 6.198883056640625e-06, <theano.gof.opt.Updater instance at 0x11f99d950>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11fa36998>: 7.3909759521484375e-06, <theano.gof.opt.Updater instance at 0x11f99b998>: 0, <theano.gof.opt.Updater instance at 0x11f9a31b8>: 0, <theano.gof.opt.Updater instance at 0x11f996ef0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f9b7200>: 7.3909759521484375e-06, <theano.tensor.opt.ShapeFeature object at 0x11f9b5210>: 2.8848648071289062e-05, <theano.gof.opt.Updater instance at 0x11f997a28>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f9a1248>: 6.67572021484375e-06, <theano.gof.opt.Updater instance at 0x11f993ab8>: 0, <theano.gof.opt.Updater instance at 0x11f9ba878>: 0, <theano.gof.opt.MergeFeature object at 0x11f9b52d0>: 2.0265579223632812e-05, <theano.gof.opt.Updater instance at 0x11f99b368>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11f9c9890>: 0.000217437744140625, <theano.gof.opt.Updater instance at 0x11f999b90>: 0, <theano.gof.opt.Updater instance at 0x11f9b83b0>: 0, <theano.gof.opt.Updater instance at 0x11f99bbd8>: 0.0, <theano.gof.opt.Updater instance at 0x11f9933f8>: 0, <theano.gof.opt.Updater instance at 0x11f9d1200>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f9d1c20>: 5.9604644775390625e-06, <theano.gof.opt.ChangeTracker instance at 0x11f9a3440>: 5.9604644775390625e-06, <theano.gof.opt.Updater instance at 0x11f9d1368>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f9928c0>: 6.67572021484375e-06, <theano.gof.opt.Updater instance at 0x11f9b8cb0>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11f9a2a28>: 0.00012183189392089844, <theano.gof.opt.ChangeTracker instance at 0x11f99c4d0>: 6.9141387939453125e-06, <theano.gof.opt.Updater instance at 0x11f9ba518>: 0.0, <theano.gof.opt.Updater instance at 0x11f998098>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x11f7e9b90>: 9.298324584960938e-06, <theano.gof.opt.Updater instance at 0x11f9a0248>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f9965a8>: 6.198883056640625e-06, <theano.gof.toolbox.PreserveNames object at 0x11f987dd0>: 3.0994415283203125e-06, <theano.gof.opt.Updater instance at 0x11fa53ef0>: 0, <theano.gof.opt.Updater instance at 0x11f996710>: 0.0, <theano.gof.opt.Updater instance at 0x11f9b9f38>: 0, <theano.gof.opt.Updater instance at 0x11f9a23f8>: 0, <theano.gof.opt.Updater instance at 0x11f9a3fc8>: 0.0, <theano.gof.opt.Updater instance at 0x11f9b97e8>: 0}
+       nb_merged 3
+       nb_constant 0
+   0.000924s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000770092010498
+       loop time 6.98566436768e-05
+       callback_time 0.0
+   0.000896s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000270s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000264883041382
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.Updater instance at 0x11f996878>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11f9c9890>: 0.0, <theano.gof.opt.Updater instance at 0x11f9978c0>: 0, <theano.gof.opt.Updater instance at 0x11fa79c20>: 0, <theano.gof.opt.Updater instance at 0x11f9a30e0>: 0, <theano.gof.opt.Updater instance at 0x11fa51908>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11fa4f128>: 0.0, <theano.gof.opt.Updater instance at 0x11f99d950>: 0.0, <theano.gof.opt.Updater instance at 0x11fa44170>: 0, <theano.gof.opt.Updater instance at 0x11f99b998>: 0, <theano.gof.opt.Updater instance at 0x11f9a31b8>: 0, <theano.gof.opt.Updater instance at 0x11f996ef0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f9b7200>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11f9b5210>: 0.0, <theano.gof.opt.Updater instance at 0x11f997a28>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f9a1248>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11fa36998>: 0.0, <theano.gof.opt.Updater instance at 0x11f993ab8>: 0, <theano.gof.opt.Updater instance at 0x11f9ba878>: 0, <theano.gof.opt.MergeFeature object at 0x11f9b52d0>: 0.0, <theano.gof.opt.Updater instance at 0x11f9b8b00>: 0, <theano.gof.opt.Updater instance at 0x11f99b368>: 0, <theano.gof.opt.Updater instance at 0x11f9a3098>: 0.0, <theano.gof.opt.Updater instance at 0x11f999b90>: 0, <theano.gof.opt.Updater instance at 0x11f9b83b0>: 0, <theano.gof.opt.Updater instance at 0x11f99bbd8>: 0.0, <theano.gof.opt.Updater instance at 0x11f9933f8>: 0, <theano.gof.opt.Updater instance at 0x11f9d1200>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f9d1c20>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f9a3440>: 0.0, <theano.gof.opt.Updater instance at 0x11f9d1368>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f9928c0>: 0.0, <theano.gof.opt.Updater instance at 0x11f9b8cb0>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11f9a2a28>: 0.0, <theano.gof.opt.Updater instance at 0x11f9b84d0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f99c4d0>: 0.0, <theano.gof.opt.Updater instance at 0x11f9ba518>: 0.0, <theano.gof.opt.Updater instance at 0x11f998098>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x11f7e9b90>: 0.0, <theano.gof.opt.Updater instance at 0x11f9a0248>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11f9965a8>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x11f987dd0>: 0.0, <theano.gof.opt.Updater instance at 0x11fbbe5f0>: 0, <theano.gof.opt.Updater instance at 0x11f994c20>: 0, <theano.gof.opt.Updater instance at 0x11fa53ef0>: 0, <theano.gof.opt.Updater instance at 0x11f996710>: 0.0, <theano.gof.opt.Updater instance at 0x11f9b9f38>: 0, <theano.gof.opt.Updater instance at 0x11f9ba758>: 0.0, <theano.gof.opt.Updater instance at 0x11fa36f80>: 0, <theano.gof.opt.Updater instance at 0x11f9a23f8>: 0, <theano.gof.opt.Updater instance at 0x11f9a3fc8>: 0.0, <theano.gof.opt.Updater instance at 0x11f9b97e8>: 0}
+       nb_merged 0
+       nb_constant 0
+   0.000075s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 6.8187713623e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.ChangeTracker instance at 0x11f9b7200>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11f9b5210>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11f9a2a28>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x11f9c9890>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x11f987dd0>: 0.0, <theano.gof.opt.Updater instance at 0x11f9978c0>: 0, <theano.gof.opt.MergeFeature object at 0x11f9b52d0>: 0.0, <theano.gof.opt.Updater instance at 0x11f9a30e0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11f99c4d0>: 0.0, <theano.gof.opt.Updater instance at 0x11f99d950>: 0.0, <theano.gof.opt.Updater instance at 0x11f9a3098>: 0.0, <theano.gof.toolbox.ReplaceValidate object at 0x11f7e9b90>: 0.0, <theano.gof.opt.Updater instance at 0x11f9b83b0>: 0, <theano.gof.opt.Updater instance at 0x11f9a3fc8>: 0.0, <theano.gof.opt.Updater instance at 0x11f99bbd8>: 0.0, <theano.gof.opt.Updater instance at 0x11f9a23f8>: 0}
+       nb_merged 0
+       nb_constant 0
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.912s for 240/61 nodes before/after optimization
+   0.043s for fgraph.validate()
+   0.117s for callback
+   time      - (name, class, index) - validate time
+   0.405265s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.005s
+     EquilibriumOptimizer      canonicalize
+       time 0.405s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.011s
+       time in local optimizers 0.362s
+       time in global optimizers 0.008s
+        0 - 0.078s 22 (0.000s in global opts, 0.002s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.090s 14 (0.006s in global opts, 0.002s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.092s 2 (0.001s in global opts, 0.003s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.074s 2 (0.000s in global opts, 0.002s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.071s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.058s - 5 - local_add_canonizer
+       0.040s - 2 - local_mul_canonizer
+       0.020s - 8 - local_upcast_elemwise_constant_inputs
+       0.016s - 8 - local_mul_switch_sink
+       0.010s - 8 - local_neg_to_mul
+       0.008s - 3 - MergeOptimizer
+       0.005s - 3 - constant_folding
+       0.002s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_dimshuffle_lift
+       0.002s - 1 - local_subtensor_make_vector
+       0.208s - in 47 optimization that where not used
+
+   0.157458s - ('specialize', 'EquilibriumOptimizer', 9) - 0.001s
+     EquilibriumOptimizer      specialize
+       time 0.157s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.007s
+       time in local optimizers 0.124s
+       time in global optimizers 0.009s
+        0 - 0.043s 12 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.038s 4 (0.002s in global opts, 0.001s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.038s 4 (0.003s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.038s 0 (0.002s in global opts, 0.002s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.011s - 8 - local_dimshuffle_lift
+       0.009s - 8 - local_mul_to_neg
+       0.005s - 4 - local_reduce_broadcastable
+       0.107s - in 52 optimization that where not used
+
+   0.122929s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.020s
+   0.044840s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.045s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.001s
+       time in local optimizers 0.039s
+       time in global optimizers 0.002s
+        0 - 0.045s 0 (0.002s in global opts, 0.001s io_toposort) - 123 nodes - 
+   0.039342s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.012s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.0019850730896
+       loop time 0.0372240543365
+       callback_time 0.0233583450317
+   0.021437s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.002s
+   0.019711s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.020s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.003s
+       time in local optimizers 0.000s
+       time in global optimizers 0.017s
+        0 - 0.020s 0 (0.017s in global opts, 0.003s io_toposort) - 125 nodes - 
+   0.016691s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.016s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.015s
+        0 - 0.016s 0 (0.015s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.016240s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.016s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.005s
+       time in local optimizers 0.010s
+       time in global optimizers 0.000s
+        0 - 0.008s 8 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.006s 4 (0.000s in global opts, 0.002s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.002s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.006s - 8 - local_max_and_argmax
+       0.004s - 4 - local_max_to_min
+       0.000s - in 0 optimization that where not used
+
+   0.015286s - ('merge1', 'MergeOptimizer', 1) - 0.001s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0103781223297
+       validate_time 0.00137519836426
+       callback_time 0.00553607940674
+       callback_times {<theano.compile.function_module.Supervisor instance at 0x11fe8b950>: 0.00034499168395996094, <theano.gof.toolbox.ReplaceValidate object at 0x11fd9b410>: 0.0002830028533935547, <theano.tensor.opt.ShapeFeature object at 0x11fe84950>: 0.001001119613647461, <theano.gof.toolbox.PreserveNames object at 0x11fe845d0>: 0.0001552104949951172, <theano.gof.opt.MergeFeature object at 0x11fe84a10>: 0.001840829849243164}
+       nb_merged 124
+       nb_constant 1
+   0.013132s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.013s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.002716s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.003s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.001s
+           time in local optimizers 0.001s
+           time in global optimizers 0.000s
+            0 - 0.003s 0 (0.000s in global opts, 0.001s io_toposort) - 123 nodes - 
+       0.002299s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.000485420227051
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00153613090515
+       0.002175s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00193405151367
+           loop time 0.000165939331055
+           callback_time 0.0
+       0.002151s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00148296356201
+           loop time 0.000586032867432
+           callback_time 0.0
+       0.002081s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00146698951721
+           loop time 0.000529050827026
+           callback_time 0.0
+       0.001689s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00144195556641
+           loop time 0.000175952911377
+           callback_time 0.0
+
+   0.012236s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.005514s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.00164008140564
+       loop time 0.00377106666565
+       callback_time 0.00259566307068
+   0.002923s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.00236988067627
+       loop time 0.000488042831421
+       callback_time 0.0
+   0.002762s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.002653s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.003s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.000s
+        0 - 0.003s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.002010s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.0014009475708
+       loop time 0.000518798828125
+       callback_time 0.0
+   0.001972s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00142288208008
+       loop time 0.000459909439087
+       callback_time 0.0
+   0.001788s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00139999389648
+       loop time 0.000300884246826
+       callback_time 0.0
+   0.001767s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00152921676636
+       loop time 0.000144004821777
+       callback_time 0.0
+   0.001427s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00141501426697
+       validate_time 0.000234127044678
+       callback_time 0.000963687896729
+       callback_times {<theano.gof.opt.Updater instance at 0x11fefeab8>: 0, <theano.gof.opt.Updater instance at 0x11fe97908>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ff48128>: 7.62939453125e-06, <theano.tensor.opt.ShapeFeature object at 0x11fe84950>: 3.886222839355469e-05, <theano.gof.opt.Updater instance at 0x11feb3950>: 0, <theano.gof.opt.Updater instance at 0x11feb2998>: 0, <theano.gof.opt.ChangeTracker instance at 0x11feb31b8>: 2.47955322265625e-05, <theano.gof.opt.MergeFeature object at 0x11fe84a10>: 2.9087066650390625e-05, <theano.gof.opt.ChangeTracker instance at 0x11ff39a28>: 8.58306884765625e-06, <theano.gof.opt.Updater instance at 0x11feaf248>: 0.0, <theano.gof.opt.Updater instance at 0x11fe96c68>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11fe8ea70>: 5.7220458984375e-06, <theano.gof.opt.Updater instance at 0x11feb1ab8>: 0.0, <theano.gof.opt.Updater instance at 0x11feaf2d8>: 0, <theano.gof.opt.Updater instance at 0x11feb3b00>: 0, <theano.gof.opt.Updater instance at 0x11fec93f8>: 0.0, <theano.gof.opt.Updater instance at 0x11fe94320>: 0.0, <theano.gof.opt.Updater instance at 0x11fe8f758>: 0, <theano.gof.opt.ChangeTracker instance at 0x11fe8eb90>: 9.059906005859375e-06, <theano.gof.opt.ChangeTracker instance at 0x11feb2bd8>: 6.67572021484375e-06, <theano.gof.opt.ChangeTracker instance at 0x11fe8f3f8>: 8.821487426757812e-06, <theano.gof.toolbox.ReplaceValidate object at 0x11fd9b410>: 1.1920928955078125e-05, <theano.gof.opt.Updater instance at 0x11fe86cb0>: 0, <theano.gof.opt.Updater instance at 0x11feb2c68>: 0, <theano.gof.opt.Updater instance at 0x11fe99cb0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11fe8e4d0>: 5.7220458984375e-06, <theano.gof.opt.Updater instance at 0x11fe8af80>: 0, <theano.gof.opt.Updater instance at 0x11fe8e7e8>: 0, <theano.gof.opt.Updater instance at 0x11fe8e560>: 0, <theano.gof.opt.Updater instance at 0x11fec9d88>: 0, <theano.gof.opt.Updater instance at 0x11fe913f8>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11fe8b950>: 0.000148773193359375, <theano.gof.toolbox.PreserveNames object at 0x11fe845d0>: 8.821487426757812e-06, <theano.gof.opt.Updater instance at 0x11feb1638>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11febde50>: 0.0004017353057861328, <theano.gof.opt.Updater instance at 0x11feb0ea8>: 0.0, <theano.gof.opt.Updater instance at 0x11fe96bd8>: 0.0, <theano.gof.opt.Updater instance at 0x11fefe7e8>: 0, <theano.gof.opt.Updater instance at 0x11fe8ff38>: 0, <theano.gof.opt.ChangeTracker instance at 0x11feb3758>: 9.059906005859375e-06, <theano.gof.opt.Updater instance at 0x11fe94f80>: 0, <theano.gof.opt.Updater instance at 0x11fe993f8>: 0, <theano.gof.opt.Updater instance at 0x11fe997e8>: 0, <theano.gof.opt.Updater instance at 0x11fe9a950>: 0}
+       nb_merged 3
+       nb_constant 0
+   0.001397s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.000950s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000787973403931
+       loop time 7.20024108887e-05
+       callback_time 0.0
+   0.000896s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.00074291229248
+       loop time 6.91413879395e-05
+       callback_time 0.0
+   0.000777s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000270s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000264883041382
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.opt.Updater instance at 0x11fefeab8>: 0, <theano.gof.opt.Updater instance at 0x11fe96bd8>: 0.0, <theano.gof.opt.Updater instance at 0x1200a72d8>: 0, <theano.gof.opt.Updater instance at 0x11fe97908>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ff48128>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11fe84950>: 0.0, <theano.gof.opt.Updater instance at 0x11feb3950>: 0, <theano.gof.opt.Updater instance at 0x11feb2998>: 0, <theano.gof.opt.ChangeTracker instance at 0x11feb31b8>: 0.0, <theano.gof.opt.MergeFeature object at 0x11fe84a10>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11ff39a28>: 0.0, <theano.gof.opt.Updater instance at 0x11feaf248>: 0.0, <theano.gof.opt.Updater instance at 0x11fe96c68>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11fe8ea70>: 0.0, <theano.gof.opt.Updater instance at 0x11feb1ab8>: 0.0, <theano.gof.opt.Updater instance at 0x11feaf2d8>: 0, <theano.gof.opt.Updater instance at 0x11feb3b00>: 0, <theano.gof.opt.Updater instance at 0x11fe94320>: 0.0, <theano.gof.opt.Updater instance at 0x11ff4ab48>: 0, <theano.gof.opt.Updater instance at 0x11fe8f758>: 0, <theano.gof.opt.ChangeTracker instance at 0x11fe8eb90>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11feb2bd8>: 0.0, <theano.gof.opt.Updater instance at 0x11fe993f8>: 0, <theano.gof.toolbox.ReplaceValidate object at 0x11fd9b410>: 0.0, <theano.gof.opt.Updater instance at 0x11fe86cb0>: 0, <theano.gof.opt.Updater instance at 0x11feb2c68>: 0, <theano.gof.opt.Updater instance at 0x11fe99cb0>: 0, <theano.gof.opt.ChangeTracker instance at 0x11fe8e4d0>: 0.0, <theano.gof.opt.Updater instance at 0x1200bacf8>: 0, <theano.gof.opt.Updater instance at 0x11fe9a950>: 0, <theano.gof.opt.Updater instance at 0x11fe8af80>: 0, <theano.gof.opt.Updater instance at 0x11fe98ab8>: 0, <theano.gof.opt.Updater instance at 0x11fe8e560>: 0, <theano.gof.opt.ChangeTracker instance at 0x11feb3758>: 0.0, <theano.gof.opt.Updater instance at 0x11fec9d88>: 0, <theano.gof.opt.Updater instance at 0x11fe8e7e8>: 0, <theano.gof.opt.Updater instance at 0x11fe913f8>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11fe8b950>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x11fe845d0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11fe8f3f8>: 0.0, <theano.gof.opt.Updater instance at 0x11feb1638>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11febde50>: 0.0, <theano.gof.opt.Updater instance at 0x11feb0ea8>: 0.0, <theano.gof.opt.Updater instance at 0x11fe8c4d0>: 0, <theano.gof.opt.Updater instance at 0x11fe8cef0>: 0, <theano.gof.opt.Updater instance at 0x11fefe7e8>: 0, <theano.gof.opt.Updater instance at 0x11fe8ff38>: 0, <theano.gof.opt.Updater instance at 0x11ff73758>: 0.0, <theano.gof.opt.Updater instance at 0x11fe94f80>: 0, <theano.gof.opt.Updater instance at 0x11fec93f8>: 0.0, <theano.gof.opt.Updater instance at 0x11fe997e8>: 0, <theano.gof.opt.Updater instance at 0x11fe92950>: 0.0}
+       nb_merged 0
+       nb_constant 0
+   0.000086s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 7.79628753662e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.toolbox.ReplaceValidate object at 0x11fd9b410>: 0.0, <theano.gof.opt.Updater instance at 0x11fe86cb0>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x11febde50>: 0.0, <theano.compile.function_module.Supervisor instance at 0x11fe8b950>: 0.0, <theano.gof.opt.MergeFeature object at 0x11fe84a10>: 0.0, <theano.gof.opt.Updater instance at 0x11feb0ea8>: 0.0, <theano.gof.opt.Updater instance at 0x11feb1ab8>: 0.0, <theano.gof.opt.Updater instance at 0x11fe97908>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x11fe84950>: 0.0, <theano.gof.opt.Updater instance at 0x11fe8f758>: 0, <theano.gof.opt.Updater instance at 0x11feb3950>: 0, <theano.gof.opt.ChangeTracker instance at 0x11fe8eb90>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11feb31b8>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x11fe845d0>: 0.0, <theano.gof.opt.Updater instance at 0x11fe997e8>: 0, <theano.gof.opt.Updater instance at 0x11fe913f8>: 0.0}
+       nb_merged 0
+       nb_constant 0
+
+Optimizer Profile
+-----------------
+ SeqOptimizer  OPT_FAST_RUN  time 0.947s for 240/61 nodes before/after optimization
+   0.040s for fgraph.validate()
+   0.118s for callback
+   time      - (name, class, index) - validate time
+   0.416074s - ('canonicalize', 'EquilibriumOptimizer', 4) - 0.004s
+     EquilibriumOptimizer      canonicalize
+       time 0.416s for 5 passes
+       nb nodes (start, end,  max) 125 123 137
+       time io_toposort 0.011s
+       time in local optimizers 0.372s
+       time in global optimizers 0.007s
+        0 - 0.087s 22 (0.000s in global opts, 0.002s io_toposort) - 125 nodes - ('local_neg_to_mul', 8) ('local_upcast_elemwise_constant_inputs', 8) ('local_mul_switch_sink', 4) ('local_shape_to_shape_i', 1) ('local_mul_canonizer', 1)
+        1 - 0.079s 14 (0.005s in global opts, 0.002s io_toposort) - 137 nodes - ('local_add_canonizer', 5) ('local_mul_switch_sink', 4) ('local_subtensor_make_vector', 1) ('local_mul_canonizer', 1) ('constant_folding', 1) ...
+        2 - 0.082s 2 (0.001s in global opts, 0.003s io_toposort) - 125 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        3 - 0.081s 2 (0.000s in global opts, 0.003s io_toposort) - 124 nodes - ('MergeOptimizer', 1) ('constant_folding', 1)
+        4 - 0.086s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.062s - 5 - local_add_canonizer
+       0.040s - 2 - local_mul_canonizer
+       0.018s - 8 - local_upcast_elemwise_constant_inputs
+       0.017s - 8 - local_mul_switch_sink
+       0.015s - 8 - local_neg_to_mul
+       0.007s - 3 - MergeOptimizer
+       0.006s - 3 - constant_folding
+       0.002s - 1 - local_shape_to_shape_i
+       0.002s - 1 - local_dimshuffle_lift
+       0.002s - 1 - local_subtensor_make_vector
+       0.209s - in 47 optimization that where not used
+
+   0.161513s - ('specialize', 'EquilibriumOptimizer', 9) - 0.001s
+     EquilibriumOptimizer      specialize
+       time 0.161s for 4 passes
+       nb nodes (start, end,  max) 123 131 131
+       time io_toposort 0.007s
+       time in local optimizers 0.127s
+       time in global optimizers 0.009s
+        0 - 0.047s 12 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - ('local_mul_to_neg', 8) ('local_reduce_broadcastable', 4)
+        1 - 0.042s 4 (0.003s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        2 - 0.034s 4 (0.002s in global opts, 0.002s io_toposort) - 127 nodes - ('local_dimshuffle_lift', 4)
+        3 - 0.038s 0 (0.002s in global opts, 0.002s io_toposort) - 131 nodes - 
+       times - times applied - name:
+       0.011s - 8 - local_mul_to_neg
+       0.010s - 8 - local_dimshuffle_lift
+       0.005s - 4 - local_reduce_broadcastable
+       0.109s - in 52 optimization that where not used
+
+   0.105361s - ('elemwise_fusion', 'FusionOptimizer', 21) - 0.016s
+   0.043306s - ('stabilize', 'EquilibriumOptimizer', 6) - 0.000s
+     EquilibriumOptimizer      stabilize
+       time 0.043s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.037s
+       time in global optimizers 0.002s
+        0 - 0.043s 0 (0.002s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.040276s - ('local_inplace_setsubtensor', 'TopoOptimizer', 16) - 0.012s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 10)
+       init io_toposort 0.00198292732239
+       loop time 0.0381789207458
+       callback_time 0.0246460437775
+   0.027248s - ('inplace_elemwise_optimizer', 'FromFunctionOptimizer', 22) - 0.002s
+   0.024379s - ('uncanonicalize', 'EquilibriumOptimizer', 11) - 0.001s
+     EquilibriumOptimizer      uncanonicalize
+       time 0.024s for 3 passes
+       nb nodes (start, end,  max) 131 123 131
+       time io_toposort 0.008s
+       time in local optimizers 0.015s
+       time in global optimizers 0.000s
+        0 - 0.011s 8 (0.000s in global opts, 0.003s io_toposort) - 131 nodes - ('local_max_and_argmax', 8)
+        1 - 0.011s 4 (0.000s in global opts, 0.004s io_toposort) - 131 nodes - ('local_max_to_min', 4)
+        2 - 0.003s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       times - times applied - name:
+       0.008s - 8 - local_max_and_argmax
+       0.007s - 4 - local_max_to_min
+       0.000s - in 0 optimization that where not used
+
+   0.022924s - ('scan_eqopt1', 'EquilibriumOptimizer', 2) - 0.000s
+     EquilibriumOptimizer      scan_eqopt1
+       time 0.023s for 1 passes
+       nb nodes (start, end,  max) 125 125 125
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.020s
+        0 - 0.023s 0 (0.020s in global opts, 0.002s io_toposort) - 125 nodes - 
+   0.021642s - ('scan_eqopt2', 'EquilibriumOptimizer', 7) - 0.000s
+     EquilibriumOptimizer      scan_eqopt2
+       time 0.022s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.002s
+       time in local optimizers 0.000s
+       time in global optimizers 0.019s
+        0 - 0.022s 0 (0.019s in global opts, 0.002s io_toposort) - 123 nodes - 
+   0.018639s - ('BlasOpt', 'SeqOptimizer', 8) - 0.000s
+     SeqOptimizer      BlasOpt  time 0.019s for 123/123 nodes before/after optimization
+       0.000s for fgraph.validate()
+       0.000s for callback
+       0.003915s - ('local_gemm_to_gemv', 'EquilibriumOptimizer', 3) - 0.000s
+         EquilibriumOptimizer          local_gemm_to_gemv
+           time 0.004s for 1 passes
+           nb nodes (start, end,  max) 123 123 123
+           time io_toposort 0.002s
+           time in local optimizers 0.001s
+           time in global optimizers 0.000s
+            0 - 0.004s 0 (0.000s in global opts, 0.002s io_toposort) - 123 nodes - 
+       0.003801s - ('local_dot22_to_dot22scalar', 'TopoOptimizer', 2) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00287985801697
+           loop time 0.000769853591919
+           callback_time 0.0
+       0.003366s - ('gemm_optimizer', 'GemmOptimizer', 1) - 0.000s
+         GemmOptimizer
+          nb_iter 1
+          nb_replacement 0
+          nb_replacement_didn_t_remove 0
+          nb_inconsistency_make 0
+          nb_inconsistency_replace 0
+          time_canonicalize 0.00103116035461
+          time_factor_can 0
+          time_factor_list 0
+          time_toposort 0.00180411338806
+       0.002871s - ('use_c_blas', 'TopoOptimizer', 4) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00200796127319
+           loop time 0.000762939453125
+           callback_time 0.0
+       0.002657s - ('local_dot_to_dot22', 'TopoOptimizer', 0) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.00231003761292
+           loop time 0.000237941741943
+           callback_time 0.0
+       0.001984s - ('use_scipy_ger', 'TopoOptimizer', 5) - 0.000s
+         TopoOptimizer
+           nb_node (start, end, changed) (123, 123, 0)
+           init io_toposort 0.0016930103302
+           loop time 0.000205993652344
+           callback_time 0.0
+
+   0.017763s - ('merge1', 'MergeOptimizer', 1) - 0.001s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.0112030506134
+       validate_time 0.00147271156311
+       callback_time 0.00591421127319
+       callback_times {<theano.compile.function_module.Supervisor instance at 0x1206b0680>: 0.0003719329833984375, <theano.gof.toolbox.ReplaceValidate object at 0x120578810>: 0.00028705596923828125, <theano.tensor.opt.ShapeFeature object at 0x1202ae110>: 0.0011143684387207031, <theano.gof.toolbox.PreserveNames object at 0x1202ae850>: 0.00017380714416503906, <theano.gof.opt.MergeFeature object at 0x1202ae290>: 0.0019576549530029297}
+       nb_merged 124
+       nb_constant 1
+   0.014937s - ('ShapeOpt', 'ShapeOptimizer', 0) - 0.000s
+   0.007636s - ('dimshuffle_as_view', 'TopoOptimizer', 15) - 0.001s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 5)
+       init io_toposort 0.00246810913086
+       loop time 0.00502991676331
+       callback_time 0.00354480743408
+   0.004280s - ('specialize_device', 'EquilibriumOptimizer', 12) - 0.000s
+     EquilibriumOptimizer      specialize_device
+       time 0.004s for 1 passes
+       nb nodes (start, end,  max) 123 123 123
+       time io_toposort 0.003s
+       time in local optimizers 0.001s
+       time in global optimizers 0.000s
+        0 - 0.004s 0 (0.000s in global opts, 0.003s io_toposort) - 123 nodes - 
+   0.003535s - ('local_IncSubtensor_serialize', 'TopoOptimizer', 3) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (125, 125, 0)
+       init io_toposort 0.0029730796814
+       loop time 0.000478982925415
+       callback_time 0.0
+   0.002866s - ('crossentropy_to_crossentropy_with_softmax', 'FromFunctionOptimizer', 10) - 0.000s
+   0.002129s - ('scanOp_make_inplace', 'ScanInplaceOptimizer', 23) - 0.000s
+   0.001930s - ('make_ger_destructive', 'TopoOptimizer', 18) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.001384973526
+       loop time 0.000454902648926
+       callback_time 0.0
+   0.001921s - ('local_inplace_incsubtensor1', 'TopoOptimizer', 17) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.0016770362854
+       loop time 0.000146865844727
+       callback_time 0.0
+   0.001823s - ('blas_opt_inplace', 'TopoOptimizer', 20) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00135397911072
+       loop time 0.000385999679565
+       callback_time 0.0
+   0.001740s - ('c_blas_destructive', 'TopoOptimizer', 19) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (120, 120, 0)
+       init io_toposort 0.00135707855225
+       loop time 0.000298023223877
+       callback_time 0.0
+   0.001225s - ('merge2', 'MergeOptimizer', 13) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.00121402740479
+       validate_time 0.000225067138672
+       callback_time 0.000785350799561
+       callback_times {<theano.gof.toolbox.ReplaceValidate object at 0x120578810>: 1.1920928955078125e-05, <theano.gof.opt.Updater instance at 0x12003a830>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x1202ae850>: 7.3909759521484375e-06, <theano.gof.opt.Updater instance at 0x120018878>: 0, <theano.gof.opt.ChangeTracker instance at 0x1202d6098>: 1.0251998901367188e-05, <theano.gof.opt.ChangeTracker instance at 0x1202668c0>: 6.198883056640625e-06, <theano.gof.opt.ChangeTracker instance at 0x1200c40e0>: 7.152557373046875e-06, <theano.gof.opt.ChangeTracker instance at 0x1202ca908>: 9.059906005859375e-06, <theano.tensor.opt.ShapeFeature object at 0x1202ae110>: 3.695487976074219e-05, <theano.gof.opt.Updater instance at 0x12006b998>: 0, <theano.gof.opt.Updater instance at 0x11eb571b8>: 0, <theano.gof.opt.ChangeTracker instance at 0x1202d79e0>: 6.9141387939453125e-06, <theano.gof.opt.Updater instance at 0x11fd1e200>: 0.0, <theano.gof.opt.Updater instance at 0x12055aa28>: 0, <theano.gof.opt.Updater instance at 0x1206231b8>: 0, <theano.gof.opt.Updater instance at 0x1201d7a70>: 0.0, <theano.gof.opt.Updater instance at 0x12050c290>: 0, <theano.gof.opt.ChangeTracker instance at 0x120374878>: 5.9604644775390625e-06, <theano.gof.opt.Updater instance at 0x1204362d8>: 0, <theano.gof.opt.Updater instance at 0x11fcf8320>: 0.0, <theano.gof.opt.Updater instance at 0x11fcf89e0>: 0, <theano.gof.opt.ChangeTracker instance at 0x1202d7098>: 7.152557373046875e-06, <theano.gof.opt.Updater instance at 0x1201511b8>: 0, <theano.gof.opt.Updater instance at 0x12016cb90>: 0, <theano.gof.opt.Updater instance at 0x1206a45f0>: 0, <theano.gof.opt.Updater instance at 0x120163440>: 0, <theano.gof.opt.Updater instance at 0x1206b78c0>: 0, <theano.gof.opt.Updater instance at 0x1202caef0>: 0, <theano.gof.opt.Updater instance at 0x1202b44d0>: 0, <theano.gof.opt.Updater instance at 0x120073518>: 0, <theano.gof.opt.ChangeTracker instance at 0x1202f99e0>: 7.867813110351562e-06, <theano.gof.opt.Updater instance at 0x1200551b8>: 0.0, <theano.gof.opt.Updater instance at 0x11fe8f5a8>: 0.0, <theano.gof.opt.Updater instance at 0x1200c85f0>: 0, <theano.gof.opt.Updater instance at 0x1200faab8>: 0.0, <theano.compile.function_module.Supervisor instance at 0x1206b0680>: 0.00014400482177734375, <theano.gof.opt.Updater instance at 0x120055ea8>: 0, <theano.gof.opt.Updater instance at 0x12025bab8>: 0, <theano.gof.opt.Updater instance at 0x11fcfbef0>: 0, <theano.gof.opt.Updater instance at 0x120073680>: 0.0, <theano.gof.opt.MergeFeature object at 0x1202ae290>: 2.47955322265625e-05, <theano.gof.opt.Updater instance at 0x12005f440>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x11fcfffc8>: 7.152557373046875e-06, <theano.gof.destroyhandler.DestroyHandler object at 0x1202a57d0>: 0.00027823448181152344}
+       nb_merged 3
+       nb_constant 0
+   0.001084s - ('cond_make_inplace', 'TopoOptimizer', 24) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000878810882568
+       loop time 9.08374786377e-05
+       callback_time 0.0
+   0.001050s - ('random_make_inplace', 'TopoOptimizer', 25) - 0.000s
+     TopoOptimizer
+       nb_node (start, end, changed) (61, 61, 0)
+       init io_toposort 0.000869035720825
+       loop time 8.20159912109e-05
+       callback_time 0.0
+   0.000921s - ('add_destroy_handler', 'AddDestroyHandler', 14) - 0.000s
+   0.000306s - ('merge3', 'MergeOptimizer', 26) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 0.000298023223877
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.toolbox.ReplaceValidate object at 0x120578810>: 0.0, <theano.gof.opt.Updater instance at 0x12003a830>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x1202ae850>: 0.0, <theano.gof.opt.Updater instance at 0x120018878>: 0, <theano.gof.opt.ChangeTracker instance at 0x1202d6098>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1202668c0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1200c40e0>: 0.0, <theano.gof.opt.Updater instance at 0x1204362d8>: 0, <theano.gof.opt.ChangeTracker instance at 0x1202ca908>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x1202ae110>: 0.0, <theano.gof.opt.Updater instance at 0x1201dd830>: 0.0, <theano.gof.opt.Updater instance at 0x12006b998>: 0, <theano.gof.opt.Updater instance at 0x11eb571b8>: 0, <theano.gof.opt.Updater instance at 0x11fcf89e0>: 0, <theano.gof.opt.Updater instance at 0x11fd1e200>: 0.0, <theano.gof.opt.Updater instance at 0x12055aa28>: 0, <theano.gof.opt.Updater instance at 0x1206231b8>: 0, <theano.gof.opt.Updater instance at 0x1201d7a70>: 0.0, <theano.gof.opt.Updater instance at 0x12050c290>: 0, <theano.gof.opt.Updater instance at 0x120264878>: 0.0, <theano.gof.opt.Updater instance at 0x11ff492d8>: 0, <theano.gof.opt.Updater instance at 0x11fcf8320>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1202d79e0>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1202d7098>: 0.0, <theano.gof.opt.Updater instance at 0x1201511b8>: 0, <theano.gof.opt.Updater instance at 0x12016cb90>: 0, <theano.gof.opt.Updater instance at 0x1206a45f0>: 0, <theano.gof.opt.Updater instance at 0x120163440>: 0, <theano.gof.opt.MergeFeature object at 0x1202ae290>: 0.0, <theano.gof.opt.Updater instance at 0x1206b78c0>: 0, <theano.gof.opt.Updater instance at 0x1202caef0>: 0, <theano.gof.opt.Updater instance at 0x1202b44d0>: 0, <theano.gof.opt.Updater instance at 0x120073518>: 0, <theano.gof.opt.Updater instance at 0x120098d40>: 0, <theano.gof.opt.ChangeTracker instance at 0x1202f99e0>: 0.0, <theano.gof.opt.Updater instance at 0x1200551b8>: 0.0, <theano.gof.opt.Updater instance at 0x11fe8f5a8>: 0.0, <theano.gof.opt.Updater instance at 0x1200c85f0>: 0, <theano.gof.opt.Updater instance at 0x1200faab8>: 0.0, <theano.gof.opt.Updater instance at 0x1200a7680>: 0, <theano.gof.opt.ChangeTracker instance at 0x11fcfffc8>: 0.0, <theano.gof.opt.Updater instance at 0x120055ea8>: 0, <theano.gof.opt.Updater instance at 0x12025bab8>: 0, <theano.gof.opt.Updater instance at 0x11fcfbef0>: 0, <theano.compile.function_module.Supervisor instance at 0x1206b0680>: 0.0, <theano.gof.opt.Updater instance at 0x11f38ef38>: 0, <theano.gof.opt.Updater instance at 0x11f50d290>: 0, <theano.gof.opt.Updater instance at 0x12005f440>: 0.0, <theano.gof.opt.Updater instance at 0x120073680>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x120374878>: 0.0, <theano.gof.destroyhandler.DestroyHandler object at 0x1202a57d0>: 0.0, <theano.gof.opt.Updater instance at 0x1201817e8>: 0}
+       nb_merged 0
+       nb_constant 0
+   0.000076s - ('merge1.2', 'MergeOptimizer', 5) - 0.000s
+     MergeOptimizer
+       nb_fail 0
+       replace_time 6.89029693604e-05
+       validate_time 0.0
+       callback_time 0.0
+       callback_times {<theano.gof.toolbox.ReplaceValidate object at 0x120578810>: 0.0, <theano.gof.opt.Updater instance at 0x12003a830>: 0.0, <theano.gof.opt.Updater instance at 0x12005f440>: 0.0, <theano.gof.toolbox.PreserveNames object at 0x1202ae850>: 0.0, <theano.gof.opt.Updater instance at 0x1201d7a70>: 0.0, <theano.compile.function_module.Supervisor instance at 0x1206b0680>: 0.0, <theano.gof.opt.ChangeTracker instance at 0x1202d6098>: 0.0, <theano.gof.opt.Updater instance at 0x120055ea8>: 0, <theano.gof.opt.Updater instance at 0x1202caef0>: 0, <theano.gof.opt.ChangeTracker instance at 0x1202ca908>: 0.0, <theano.tensor.opt.ShapeFeature object at 0x1202ae110>: 0.0, <theano.gof.opt.MergeFeature object at 0x1202ae290>: 0.0, <theano.gof.opt.Updater instance at 0x11fe8f5a8>: 0.0, <theano.gof.opt.Updater instance at 0x1206231b8>: 0, <theano.gof.destroyhandler.DestroyHandler object at 0x1202a57d0>: 0.0, <theano.gof.opt.Updater instance at 0x11eb571b8>: 0}
+       nb_merged 0
+       nb_constant 0
